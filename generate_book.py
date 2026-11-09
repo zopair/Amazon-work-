@@ -9,6 +9,8 @@ from reportlab.lib.units import inch
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas
+from pypdf import PdfReader, PdfWriter
+from pypdf.generic import RectangleObject
 from reportlab.platypus import Paragraph
 from reportlab.lib.styles import ParagraphStyle
 import arabic_reshaper
@@ -16,7 +18,7 @@ from bidi.algorithm import get_display
 
 # KDP full bleed for 8.5 x 8.5 in trim: add 0.125 in to width and 0.25 in to height.
 PW, PH = 8.625*inch, 8.75*inch
-BX, BY, SAFE = .0625*inch, .125*inch, .375*inch
+BX, BY, SAFE = .0625*inch, .125*inch, .5*inch
 COLORS = ["#F36F76","#FFD45F","#65B9E8","#77C98B","#FFA45B","#A98BD8","#F2A5C5"]
 # Each record: English title/body, Arabic title/body, Mom's English/Arabic prompt, art theme.
 PAGES = [
@@ -61,6 +63,8 @@ def para(c, text, x, top, width, font, size, color, align=1, leading=None):
     p=Paragraph(text,st); _,h=p.wrap(width,PH); p.drawOn(c,x,top-h)
 def train(c,cx,cy,s):
     # Original vector train character, reused consistently on all pages.
+    # Dimensions below are inches; convert once to PDF points for print-scale artwork.
+    s *= inch
     for i,col in enumerate(COLORS[:4]):
         x=cx+(i-2.2)*.83*s
         c.setFillColor(HexColor(col)); c.setStrokeColor(colors.white)
@@ -130,5 +134,25 @@ def main():
             para(c,"Mom's Turn: "+escape(me),left+.12*inch,py+.48*inch,width-.24*inch,"English",7.1,"#526477",align=0,leading=9)
             para(c,ar("دور الأم: "+escape(ma)),left+.12*inch,py+.27*inch,width-.24*inch,"Arabic",8.2,"#526477",align=2,leading=11)
         c.setFillColor(HexColor("#526477")); c.setFont("English",7); c.drawCentredString(PW/2,BY+SAFE+.04*inch,str(n)); c.showPage()
-    c.save(); print(f"Created {out}: {len(PAGES)} pages; {PW/inch:.3f} x {PH/inch:.3f} inches")
+    c.save()
+    # Explicit print boxes: full-bleed media/bleed area and an 8.5 x 8.5 in trim.
+    # Odd pages have the outside bleed on the right; even pages on the left.
+    reader = PdfReader(str(out))
+    writer = PdfWriter()
+    trim_w, trim_h = 8.5*inch, 8.5*inch
+    for page_no, page in enumerate(reader.pages, 1):
+        trim_x = 0 if page_no % 2 else .125*inch
+        page.trimbox = RectangleObject([trim_x, .125*inch, trim_x+trim_w, .125*inch+trim_h])
+        page.bleedbox = RectangleObject([0, 0, PW, PH])
+        writer.add_page(page)
+    writer.add_metadata({
+        "/Title": "The Happy Little Train | قطار الألوان السعيد",
+        "/Author": "Original bilingual children's book project",
+        "/Subject": "24-page Arabic-English interactive picture book; 8.5 x 8.5 in trim with full bleed",
+    })
+    boxed = out.with_name(out.stem + ".boxed.pdf")
+    with boxed.open("wb") as stream:
+        writer.write(stream)
+    boxed.replace(out)
+    print(f"Created {out}: {len(PAGES)} pages; {PW/inch:.3f} x {PH/inch:.3f} inches")
 if __name__=="__main__": main()
