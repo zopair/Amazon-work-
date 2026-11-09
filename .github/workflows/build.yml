@@ -72,5 +72,7 @@ jobs:
             echo "Generated PDF is unchanged; nothing to commit."
           else
             git commit -m "Build print-ready bilingual children's book PDF"
+            # Rebase if another source commit lands while the PDF is being built.
+            git pull --rebase origin main
             git push
           fi
