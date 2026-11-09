@@ -7,6 +7,7 @@ A modular, deterministic, no-secret production pipeline for the approved 24-page
 The feature branch `feature/deterministic-swarm-phase-3` adds:
 - A versioned book manifest and KDP interior profile.
 - A Character Bible that centralizes the locomotive and supporting characters.
+- A localization QA agent that checks bilingual completeness, script and text direction; it does not perform automatic translation.
 - Story and character agents that emit stable JSON.
 - A pure-standard-library SVG illustrator that produces original, resolution-independent vector scenes.
 - A fail-fast orchestrator and regression tests.
