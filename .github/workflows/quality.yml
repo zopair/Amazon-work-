@@ -1,8 +1,6 @@
 name: Swarm contracts and regression tests
 
 on:
-  push:
-    branches: [main, "feature/**"]
   pull_request:
   workflow_dispatch:
 
