@@ -20,7 +20,7 @@ The print build now pins direct and transitive Python package versions in `requi
 | pycparser | 3.12 | [eliben/pycparser](https://github.com/eliben/pycparser) | BSD-3-Clause |
 | webencodings | 0.6.1 | [gsnedders/python-webencodings](https://github.com/gsnedders/python-webencodings) | BSD-3-Clause |
 | brotli | 1.2.1 | [google/brotli](https://github.com/google/brotli) | MIT |
-| zopfli | 0.4.3 | [google/zopfli](https://github.com/google/zopfli) | Apache-2.0 |
+| zopfli | 0.4.3 | [fonttools/py-zopfli](https://github.com/fonttools/py-zopfli) | Wrapper-level license file still needs direct verification; upstream Zopfli core is Apache-2.0 |
 
 ## Source provenance: current status
 
