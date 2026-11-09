@@ -1,20 +1,17 @@
 {
   "schema_version": "1.0",
   "book_id": "happy-little-train",
-  "title": {
-    "en": "The Happy Little Train",
-    "ar": "قطار الألوان السعيد"
-  },
+  "title": {"en": "The Happy Little Train", "ar": "قطار الألوان السعيد"},
   "locales": ["en", "ar"],
   "age_range": "3-6",
   "page_count": 24,
   "content_source": "approved_python_module",
   "artwork": {
-    "mode": "procedural_pillow",
+    "mode": "procedural_svg",
     "output_dir": "assets/artwork",
     "width": 2588,
     "height": 1716,
-    "format": "JPEG"
+    "format": "SVG"
   },
   "kdp_profile": "square-8.5-premium-color-24p",
   "seed": 24001,
