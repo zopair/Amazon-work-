@@ -78,7 +78,7 @@ html, body {{ margin:0; padding:0; width:{w}in; height:{h}in; overflow:hidden }}
 .sheet {{ position:relative; width:{w}in; height:{h}in; background:#fffaf0; overflow:hidden }}
 .panel {{ position:absolute; top:0; height:{h}in; overflow:hidden }}
 .back {{ left:0; width:{trim_w+bleed}in; background:#f3ead7 }}
-.front {{ left:{front_x-bleed}in; width:{trim_w+bleed}in; background:#fff4d9 }}
+.front {{ left:{front_x}in; width:{trim_w+bleed}in; background:#fff4d9 }}
 .back-copy {{ position:absolute; left:{back_x+0.375}in; top:0.75in; width:{trim_w-0.75}in;
  font:14pt/1.45 sans-serif; color:#355064 }}
 .back-copy .ar {{ direction:rtl; text-align:right; font-size:15pt }}
