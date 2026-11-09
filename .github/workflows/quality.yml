@@ -1,0 +1,42 @@
+name: Swarm contracts and regression tests
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: swarm-quality-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  contracts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Set up Python
+        uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: "3.12"
+      - name: Compile Python modules
+        run: python -m compileall -q book tests
+      - name: Run standard-library regression tests
+        run: python -m unittest discover -s tests -v
+      - name: Validate JSON documents
+        run: |
+          python - <<'PY'
+          import json
+          from pathlib import Path
+          for path in [
+              Path("schemas/book-manifest.schema.json"),
+              Path("config/kdp_profiles.json"),
+              Path("config/books/happy-little-train.json"),
+              Path("assets/style/character-bible.json"),
+          ]:
+              json.loads(path.read_text(encoding="utf-8"))
+              print(f"VALID JSON: {path}")
+          PY
