@@ -37,11 +37,11 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 - [x] Add standard-library regression tests for page contracts, character mappings, manifest/profile and orchestrator outputs.
 - [x] Add a quality workflow for compile, tests and JSON validation.
 - [ ] Add story quality checks: age suitability, readability, repeated phrases, continuity, learning goal and prohibited-content checks.
-- [ ] Run image generation on Actions and inspect all 24 page proofs; procedural art is not yet approved production artwork.
+- [x] Generate all 24 deterministic SVG illustrations on GitHub Actions and inspect the 24-page contact sheet; art remains a prototype pending print-proof review.
 - [x] Validate SVG XML, canvas dimensions, page mapping and deterministic output in regression tests.
 - [ ] Run generated SVGs through the print renderer and inspect the resulting PDF proofs.
-- [ ] Integrate the swarm into a manual production workflow after dependency provenance is resolved.
-- [ ] Integrate generated artwork with the existing renderer and visually verify text safe zones and odd/even gutter geometry.
+- [x] Integrate deterministic artwork generation into the existing print workflow and add manual seed/preview-only inputs; dependency provenance remains unresolved.
+- [ ] Run the integrated print workflow and verify SVG embedding, text safe zones and odd/even gutter geometry from PDF proofs.
 - [ ] Implement a separate KDP full-wrap cover builder using exact KDP calculator values for selected paper, ink and page count.
 - [ ] Add font licensing notices and pin tested Arabic font versions.
 - [ ] Add unit/integration tests for all geometry and content contracts.
@@ -49,12 +49,12 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 ## Phase 4 — GitHub Actions automation
 
 - [x] Add PR/push quality workflow with least-privilege read-only permissions and timeout.
-- [ ] Add manual workflow inputs: book profile, seed, output format and optional preview-only mode.
-- [ ] Keep content, art, layout, QA and artifact packaging as explicit jobs.
+- [x] Add manual workflow inputs for deterministic seed and preview-only mode (profile/format selection remains pending).
+- [x] Keep content audit, artwork generation/audit, PDF rendering, QA and artifact packaging as explicit jobs.
 - [ ] Pin all third-party Actions to reviewed full commit SHAs.
 - [ ] Resolve strict dependency source provenance before claiming GitHub-only acquisition.
 - [ ] Use bounded artifact retention and resource/time budgets.
-- [ ] Upload interior PDF, cover PDF, contact sheet, page proofs and JSON QA reports.
+- [x] Upload generated SVG artwork and JSON QA reports as a separate 14-day artifact; PDF proofs remain pending.
 - [ ] Keep release publishing restricted to signed-off version tags.
 - [ ] Verify fork/PR workflows cannot obtain write permissions or secrets.
 
@@ -80,7 +80,7 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 
 ## Current blockers
 
-1. **Procedural artwork needs execution and human review.** The new SVG agent can generate 24 deterministic, original vector illustrations without third-party image dependencies; it still needs full PDF integration and human visual approval.
+1. **Procedural artwork is generated but not production-approved.** GitHub Actions generated 24 SVGs and the 24-page contact sheet was visually inspected. Full PDF proof inspection and human approval remain required.
 2. **Arabic paperback availability.** KDP's official Arabic help currently says paperback publishing in Arabic is unavailable. A bilingual Arabic/English print edition is therefore not guaranteed to be accepted. Resolve language/metadata eligibility before treating the print PDF as publishable.
 3. **No cover builder.** The current workflow produces an interior PDF only; KDP cover is a separate full-wrap file.
 4. **Dependency source provenance is not yet GitHub-only.** Current workflow uses pip's default package index and Ubuntu apt repositories; a full transitive dependency provenance audit and replacement/pinning plan is required.
@@ -88,6 +88,6 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 
 ## Phase 3 implementation checkpoint
 
-The feature branch `feature/deterministic-swarm-phase-3` contains the manifest/schema, KDP profile, book configuration, character bible, story and character agents, SVG illustration agent, orchestrator, regression tests and quality workflow. These changes are not yet merged to `main`; the production renderer and existing build workflow remain unchanged.
+The feature branch `feature/deterministic-swarm-phase-3` contains the manifest/schema, KDP profile, book configuration, character bible, story and character agents, SVG illustration agent, orchestrator, regression tests, quality workflow and updated print workflow. The renderer now accepts SVG assets; the PDF workflow has not yet been executed on this branch.
 
-Next: execute the quality workflow, fix any CI findings, then run and inspect the procedural artwork generation before connecting it to the print renderer.
+Next: execute the integrated PDF build, inspect all page proofs, correct any renderer/preflight findings, and only then consider merging.
