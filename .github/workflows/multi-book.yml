@@ -155,8 +155,8 @@ jobs:
           path: public
       - name: Verify all queued sites exist
         run: |
-          test -d public/dist/sites
-          find public/dist/sites -mindepth 1 -maxdepth 1 -type d -print
+          test -d public/sites
+          find public/sites -mindepth 1 -maxdepth 1 -type d -print
       - name: Update gh-pages only after every EPUB gate passes
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -172,7 +172,7 @@ jobs:
             git -C /tmp/gh-pages rm -rf . >/dev/null 2>&1 || true
           fi
           mkdir -p /tmp/gh-pages/books
-          rsync -a public/dist/sites/ /tmp/gh-pages/books/
+          rsync -a public/sites/ /tmp/gh-pages/books/
           cat > /tmp/gh-pages/index.html <<'HTML'
           <!doctype html><html lang="en"><meta charset="utf-8"><title>Books</title>
           <h1>Published books</h1><ul>
