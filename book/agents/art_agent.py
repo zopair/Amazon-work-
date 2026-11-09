@@ -36,31 +36,31 @@ def _train(p: dict) -> str:
     o = p["outline"]
     parts = []
     # Fixed carriage order and geometry preserve the train's identity on every page.
-    for i, color in enumerate(("#72B788", "#5A9BD5", "#F6C85F")):
-        x = 125 + i * 150
+    for i, color in enumerate(("#72B788", "#5A9BD5", "#F6C85F", "#E85D5D", "#9B83C8")):
+        x = 10 + i * 130
         parts.append(
             f'<g stroke="{o}" stroke-width="5" stroke-linejoin="round">'
-            f'<rect x="{x}" y="528" width="135" height="100" rx="22" fill="{color}"/>'
-            f'<rect x="{x+12}" y="565" width="111" height="12" fill="#FFF4D6" stroke="none"/>'
+            f'<rect x="{x}" y="528" width="120" height="100" rx="22" fill="{color}"/>'
+            f'<rect x="{x+10}" y="565" width="100" height="12" fill="#FFF4D6" stroke="none"/>'
             f'<circle cx="{x+42}" cy="555" r="17" fill="#D9F2F7"/>'
-            f'<circle cx="{x+92}" cy="555" r="17" fill="#D9F2F7"/>'
+            f'<circle cx="{x+88}" cy="555" r="17" fill="#D9F2F7"/>'
             f'<circle cx="{x+34}" cy="635" r="17" fill="#655B58"/>'
-            f'<circle cx="{x+103}" cy="635" r="17" fill="#655B58"/>'
+            f'<circle cx="{x+92}" cy="635" r="17" fill="#655B58"/>'
             f'</g>'
         )
     parts.append(
         f'<g stroke="{o}" stroke-width="6" stroke-linejoin="round">'
-        '<rect x="575" y="510" width="210" height="135" rx="28" fill="#E85D5D"/>'
-        '<rect x="597" y="485" width="153" height="50" rx="18" fill="#F6C85F"/>'
-        '<rect x="597" y="615" width="200" height="40" rx="12" fill="#5A9BD5"/>'
-        '<rect x="603" y="432" width="42" height="60" rx="10" fill="#E85D5D"/>'
-        '<circle cx="637" cy="558" r="14" fill="#FFFFFF" stroke="none"/>'
-        '<circle cx="693" cy="558" r="14" fill="#FFFFFF" stroke="none"/>'
-        f'<circle cx="641" cy="562" r="5" fill="{o}" stroke="none"/>'
-        f'<circle cx="697" cy="562" r="5" fill="{o}" stroke="none"/>'
-        f'<path d="M650 590 Q668 610 688 590" fill="none" stroke="{o}" stroke-width="5"/>'
-        '<circle cx="632" cy="645" r="26" fill="#655B58"/>'
-        '<circle cx="750" cy="645" r="26" fill="#655B58"/>'
+        '<rect x="660" y="510" width="210" height="135" rx="28" fill="#E85D5D"/>'
+        '<rect x="682" y="485" width="153" height="50" rx="18" fill="#F6C85F"/>'
+        '<rect x="682" y="615" width="200" height="40" rx="12" fill="#5A9BD5"/>'
+        '<rect x="688" y="432" width="42" height="60" rx="10" fill="#E85D5D"/>'
+        '<circle cx="722" cy="558" r="14" fill="#FFFFFF" stroke="none"/>'
+        '<circle cx="778" cy="558" r="14" fill="#FFFFFF" stroke="none"/>'
+        f'<circle cx="726" cy="562" r="5" fill="{o}" stroke="none"/>'
+        f'<circle cx="782" cy="562" r="5" fill="{o}" stroke="none"/>'
+        f'<path d="M735 590 Q753 610 773 590" fill="none" stroke="{o}" stroke-width="5"/>'
+        '<circle cx="717" cy="645" r="26" fill="#655B58"/>'
+        '<circle cx="835" cy="645" r="26" fill="#655B58"/>'
         '</g>'
     )
     return "".join(parts)
@@ -75,12 +75,12 @@ def _extra(key: str, outline: str) -> str:
                 f'<circle cx="{x+48}" cy="{y+90}" r="6" fill="{outline}"/><circle cx="{x+91}" cy="{y+90}" r="6" fill="{outline}"/><ellipse cx="{x+70}" cy="{y+112}" rx="9" ry="6" fill="#E9A0B8"/></g>')
     if key == "elephant":
         return (f'<g stroke="{outline}" stroke-width="5"><ellipse cx="{x+85}" cy="{y+100}" rx="86" ry="78" fill="#A9B8C5"/>'
-                f'<ellipse cx="{x+5}" cy="{y+98}" rx="48" ry="68" fill="#A9B8C5"/><path d="M135 125 Q175 195 125 220 Q95 235 100 205" fill="none" stroke-width="19"/>'
+                f'<ellipse cx="{x+5}" cy="{y+98}" rx="48" ry="68" fill="#A9B8C5"/><path d="M{x+135} {y+125} Q{x+175} {y+195} {x+125} {y+220} Q{x+95} {y+235} {x+100} {y+205}" fill="none" stroke-width="19"/>'
                 f'<circle cx="{x+115}" cy="{y+80}" r="7" fill="{outline}"/></g>')
     if key in ("bird", "friends"):
         return (f'<g stroke="{outline}" stroke-width="5"><ellipse cx="{x+70}" cy="{y+95}" rx="65" ry="55" fill="#F4CE55"/>'
-                f'<ellipse cx="{x+70}" cy="{y+110}" rx="34" ry="25" fill="#E8B843"/><path d="M130 80 L185 100 L130 120 Z" fill="#E98D43"/>'
-                f'<circle cx="104" cy="75" r="7" fill="{outline}"/></g>')
+                f'<ellipse cx="{x+70}" cy="{y+110}" rx="34" ry="25" fill="#E8B843"/><path d="M{x+140} {y+80} L{x+190} {y+100} L{x+140} {y+120} Z" fill="#E98D43"/>'
+                f'<circle cx="{x+115}" cy="{y+80}" r="7" fill="{outline}"/></g>')
     if key == "rainbow":
         colors = ("#E85D5D", "#F29E4C", "#F6C85F", "#72B788", "#5A9BD5", "#9B83C8")
         return "".join(f'<path d="M{x-20+i*5} {y+180+i*5} A{130-i*5} {130-i*5} 0 0 1 {x+240-i*5} {y+180+i*5}" fill="none" stroke="{c}" stroke-width="15"/>' for i,c in enumerate(colors))
