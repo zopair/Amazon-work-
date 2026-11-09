@@ -116,7 +116,7 @@ def main():
             para(c,ar(escape(at)),left,PH*.84,width,"Arabic",26,"#31536B")
             para(c,escape(eb),left+.15*inch,PH*.24,width-.3*inch,"English",11,"#31536B")
             para(c,ar(escape(ab)),left+.15*inch,PH*.17,width-.3*inch,"Arabic",13,"#31536B")
-            py=BY+SAFE*.48
+            py=BY+SAFE
             c.setFillColor(colors.Color(1,1,1,alpha=.90)); c.roundRect(left,py,width,.57*inch,10,fill=1,stroke=0)
             para(c,"Mom's Turn: "+escape(me),left+.12*inch,py+.48*inch,width-.24*inch,"English",7.1,"#526477",align=0,leading=9)
             para(c,ar("دور الأم: "+escape(ma)),left+.12*inch,py+.27*inch,width-.24*inch,"Arabic",8.2,"#526477",align=2,leading=11)
@@ -125,10 +125,10 @@ def main():
             para(c,ar(escape(at)),left,PH*.84,width,"Arabic",19,"#31536B")
             para(c,escape(eb),left+.10*inch,PH*.265,width-.2*inch,"English",10.5,"#29485D",leading=14)
             para(c,ar(escape(ab)),left+.10*inch,PH*.205,width-.2*inch,"Arabic",12.5,"#29485D",leading=18)
-            py=BY+SAFE*.48
+            py=BY+SAFE
             c.setFillColor(colors.Color(1,1,1,alpha=.90)); c.roundRect(left,py,width,.57*inch,10,fill=1,stroke=0)
             para(c,"Mom's Turn: "+escape(me),left+.12*inch,py+.48*inch,width-.24*inch,"English",7.1,"#526477",align=0,leading=9)
             para(c,ar("دور الأم: "+escape(ma)),left+.12*inch,py+.27*inch,width-.24*inch,"Arabic",8.2,"#526477",align=2,leading=11)
-        c.setFillColor(HexColor("#526477")); c.setFont("English",7); c.drawCentredString(PW/2,BY+SAFE*.20,str(n)); c.showPage()
+        c.setFillColor(HexColor("#526477")); c.setFont("English",7); c.drawCentredString(PW/2,BY+SAFE+.04*inch,str(n)); c.showPage()
     c.save(); print(f"Created {out}: {len(PAGES)} pages; {PW/inch:.3f} x {PH/inch:.3f} inches")
 if __name__=="__main__": main()
