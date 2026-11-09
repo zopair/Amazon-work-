@@ -69,7 +69,7 @@ def build_epub(story: dict, manifest: dict, artwork_dir: Path, output_path: Path
     spine_items = []
     for i in range(1, 25):
         manifest_items.append(f'<item id="page-{i:02d}" href="text/page-{i:02d}.xhtml" media-type="application/xhtml+xml"/>')
-        manifest_items.append(f'<item id="image-{i:02d}" href="images/page-{i:02d}.svg" media-type="image/svg+xml" properties="svg"/>')
+        manifest_items.append(f'<item id="image-{i:02d}" href="images/page-{i:02d}.svg" media-type="image/svg+xml"/>')
         spine_items.append(f'<itemref idref="page-{i:02d}"/>')
 
     opf = f"""<?xml version="1.0" encoding="utf-8"?>
