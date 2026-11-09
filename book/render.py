@@ -4,7 +4,6 @@ from __future__ import annotations
 import argparse, html
 import xml.etree.ElementTree as ET
 from pathlib import Path
-from PIL import Image
 from weasyprint import HTML, CSS
 from pypdf import PdfReader, PdfWriter
 from pypdf.generic import RectangleObject
@@ -45,6 +44,10 @@ def validate_artwork() -> list[Path]:
             if w < min_w or h < min_h:
                 raise ValueError(f"Page {i:02d} SVG canvas is {w}x{h}; needs at least {min_w}x{min_h}")
         else:
+            try:
+                from PIL import Image
+            except ImportError as exc:
+                raise RuntimeError("Pillow is required only for raster artwork; SVG is supported without it") from exc
             with Image.open(path) as im:
                 w, h = im.size
                 if w < min_w or h < min_h:
