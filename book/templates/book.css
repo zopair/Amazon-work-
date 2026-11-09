@@ -40,7 +40,7 @@ body { font-family: "Noto Sans", "DejaVu Sans", sans-serif; color: #28465b; }
   color: #234b68; font-weight: 700;
 }
 .english p { font-size: 11pt; line-height: 1.25; margin: 0; }
-.arabic { direction: rtl; unicode-bidi: plaintext; }
+.arabic { direction: rtl; unicode-bidi: embed; text-align: center; }
 .arabic h2 {
   font-size: 19pt; line-height: 1.22; margin: 0 0 .035in;
   color: #234b68; font-weight: 700;
@@ -57,8 +57,4 @@ body { font-family: "Noto Sans", "DejaVu Sans", sans-serif; color: #28465b; }
   gap: .035in;
 }
 .mom-en { direction: ltr; text-align: left; }
-.mom-ar { direction: rtl; text-align: right; unicode-bidi: plaintext; font-size: 9pt; }
-.folio {
-  position: absolute; bottom: .14in; left: 0; right: 0;
-  text-align: center; font-size: 7pt; color: #526477;
-}
+.mom-ar { direction: rtl; unicode-bidi: embed; text-align: right; font-size: 9pt; }
