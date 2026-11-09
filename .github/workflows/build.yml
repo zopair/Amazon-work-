@@ -41,6 +41,7 @@ jobs:
   artwork-audit:
     name: Generate original vector artwork and audit assets
     runs-on: ubuntu-24.04
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5
@@ -48,8 +49,6 @@ jobs:
           python-version: '3.12'
       - name: Generate 24 deterministic original SVG illustrations
         run: python -m book.agents.orchestrator --generate-art --seed "${{ github.event.inputs.seed || '24001' }}"
-      - name: Install raster inspection dependency
-        run: python -m pip install --disable-pip-version-check Pillow==11.0.0
       - name: Audit 24 original vector/raster page illustrations
         run: python -m book.inputs --report dist/artwork-preflight.json
       - name: Upload generated artwork and diagnostics
