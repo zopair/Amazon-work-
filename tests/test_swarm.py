@@ -2,6 +2,7 @@
 import json
 import tempfile
 import unittest
+import zipfile
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
@@ -9,6 +10,7 @@ from book.agents.art_agent import generate_all
 from book.agents.character_agent import build_scene_plan, load_bible
 from book.agents.contracts import validate_page_records
 from book.agents.orchestrator import ROOT, run, validate_manifest
+from book.agents.publisher_agent import build_epub, build_static_site
 from book.agents.story_agent import build_story
 
 
@@ -55,6 +57,26 @@ class SwarmContractTests(unittest.TestCase):
             first = generate_all(story, bible, a, seed=77)
             second = generate_all(story, bible, b, seed=77)
             self.assertEqual(first[0].read_bytes(), second[0].read_bytes())
+
+    def test_epub3_and_static_site_publishers_create_24_page_outputs(self):
+        story = build_story()
+        manifest = json.loads((ROOT / "config/books/happy-little-train.json").read_text(encoding="utf-8"))
+        bible = load_bible(ROOT / "assets/style/character-bible.json")
+        with tempfile.TemporaryDirectory() as temp:
+            temp = Path(temp)
+            artwork_dir = temp / "artwork"
+            generate_all(story, bible, artwork_dir, seed=24001)
+            epub_path = build_epub(story, manifest, artwork_dir, temp / "book.epub")
+            site_path = build_static_site(story, manifest, artwork_dir, temp / "site")
+            with zipfile.ZipFile(epub_path) as archive:
+                names = archive.namelist()
+                self.assertEqual(names[0], "mimetype")
+                self.assertEqual(archive.read("mimetype"), b"application/epub+zip")
+                self.assertEqual(sum(name.startswith("OEBPS/text/page-") for name in names), 24)
+                self.assertEqual(sum(name.startswith("OEBPS/images/page-") for name in names), 24)
+            self.assertTrue((site_path / "index.html").is_file())
+            self.assertEqual(len(list((site_path / "pages").glob("page-*.html"))), 24)
+            self.assertEqual(len(list((site_path / "assets/images").glob("page-*.svg"))), 24)
 
     def test_orchestrator_emits_machine_readable_reports_without_art_generation(self):
         report = run(ROOT / "config/books/happy-little-train.json",
