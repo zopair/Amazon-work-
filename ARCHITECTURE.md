@@ -9,12 +9,12 @@ The repository contains an approved bilingual title, **The Happy Little Train / 
 - `book/render.py`: HTML/CSS to print PDF via WeasyPrint/Pango.
 - `book/preflight.py`: PDF page count, page boxes, text, fonts and artwork checks.
 - `book/inputs.py`: artwork presence, dimensions and color-mode gate.
-- `.github/workflows/build.yml`: existing print build; still requires 24 production illustrations.
+- `.github/workflows/build.yml`: now generates SVG artwork, validates assets, transfers them between jobs, and supports manual seed/preview-only inputs.
 - `book/agents/`: new deterministic agent package on the feature branch.
 - `config/`, `schemas/`, `assets/style/`, `tests/`: new manifest, KDP profile, character bible and regression contracts.
 - `assets/artwork/`: no approved production illustrations have been committed.
 
-The current production pipeline is fail-closed: no missing or placeholder artwork is silently accepted. The approved manuscript is preserved.
+The current production pipeline is fail-closed: no missing or placeholder artwork is silently accepted. The approved manuscript is preserved. The new procedural illustrations are prototypes until PDF proofs receive human review.
 
 ## 2. Hard publishing constraint
 
@@ -86,12 +86,14 @@ The current profile is `square-8.5-premium-color-24p`:
 - 0.375 in minimum margins for the 24-page bleed case.
 - Premium Color; 300 DPI art target.
 
-The profile intentionally marks `cover_requires_calculator: true`. A full-wrap cover cannot be calculated from interior trim alone: spine width depends on final page count, paper type and KDP settings. No guessed cover dimensions will be emitted.
+SVG artwork is vector-based and does not require raster DPI upscaling; raster uploads still use the 300-DPI placed-size gate. The profile intentionally marks `cover_requires_calculator: true`. A full-wrap cover cannot be calculated from interior trim alone: spine width depends on final page count, paper type and KDP settings. No guessed cover dimensions will be emitted.
 
 ## 6. Workflow and resource controls
 
 - `quality.yml` runs standard-library tests and JSON validation on pushes, pull requests and manual dispatch.
-- The existing print workflow is untouched on the feature branch.
+- `swarm-artwork.yml` generates and packages 24 SVGs without installing any Python third-party packages.
+- `build.yml` now generates the artwork, audits it, transfers it to the renderer job and offers manual `seed` and `preview_only` inputs.
+- The complete print workflow has not yet been run on the feature branch.
 - No secrets, paid APIs, external queues or automated KDP account interactions are required by the new agents.
 - Generated artwork and PDFs should remain CI artifacts, not Git history.
 - All third-party Actions still need reviewed full-SHA pinning before production hardening.
