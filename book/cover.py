@@ -6,9 +6,6 @@ import html
 import json
 from pathlib import Path
 
-from pypdf import PdfReader, PdfWriter
-from pypdf.generic import RectangleObject
-from weasyprint import HTML
 
 ROOT = Path(__file__).resolve().parents[1]
 BLEED_IN = 0.125
@@ -110,6 +107,10 @@ html, body {{ margin:0; padding:0; width:{w}in; height:{h}in; overflow:hidden }}
 
 def build_cover(manifest_path: Path, profile_path: Path, artwork_dir: Path,
                 output_path: Path, page_count: int = 24) -> dict:
+    from pypdf import PdfReader, PdfWriter
+    from pypdf.generic import RectangleObject
+    from weasyprint import HTML
+
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     profiles = json.loads(profile_path.read_text(encoding="utf-8"))
     profile = profiles["profiles"][manifest["kdp_profile"]]
