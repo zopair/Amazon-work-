@@ -3,6 +3,7 @@
 from pathlib import Path
 import sys
 from pypdf import PdfReader
+from pypdf.generic import ContentStream
 
 PDF = Path(sys.argv[1] if len(sys.argv) > 1 else "dist/the-happy-little-train-print.pdf")
 EXPECTED = (8.625 * 72, 8.75 * 72)
@@ -14,16 +15,30 @@ def has_arabic(text: str) -> bool:
     return any(any(a <= ord(ch) <= b for a,b in ARABIC_RANGES) for ch in text)
 
 
-def page_has_artwork(page) -> bool:
+def page_has_artwork(page, reader) -> bool:
+    """Accept raster XObjects, SVG form XObjects, or substantial inline vector paths."""
     resources = page.get("/Resources")
-    if not resources:
+    if resources:
+        xobjects = resources.get_object().get("/XObject")
+        if xobjects and any(
+            obj.get_object().get("/Subtype") in ("/Image", "/Form")
+            for obj in xobjects.get_object().values()
+        ):
+            return True
+
+    # WeasyPrint can paint SVG primitives directly into the page content stream
+    # rather than retaining an /Image or /Form XObject. Count actual path-paint
+    # operators so vector illustrations are not incorrectly rejected.
+    contents = page.get_contents()
+    if not contents:
         return False
-    xobjects = resources.get_object().get("/XObject")
-    if not xobjects:
-        return False
-    # Raster images use /Image; WeasyPrint may represent SVG artwork as /Form.
-    return any(obj.get_object().get("/Subtype") in ("/Image", "/Form")
-               for obj in xobjects.get_object().values())
+    stream = ContentStream(contents, reader)
+    path_ops = {
+        b"m", b"l", b"c", b"v", b"y", b"h", b"re",
+        b"S", b"s", b"f", b"F", b"f*", b"B", b"B*", b"b", b"b*",
+    }
+    path_count = sum(1 for _, operator in stream.operations if operator in path_ops)
+    return path_count >= 20
 
 
 def embedded_font(font) -> bool:
@@ -59,7 +74,7 @@ def main():
             raise SystemExit(f"FAIL page {i}: Arabic text missing from text layer")
         if not text.strip():
             raise SystemExit(f"FAIL page {i}: empty text layer")
-        if not page_has_artwork(page):
+        if not page_has_artwork(page, reader):
             raise SystemExit(f"FAIL page {i}: original artwork not embedded")
         resources = page.get("/Resources")
         fonts = resources.get_object().get("/Font") if resources else None
