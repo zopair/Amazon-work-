@@ -33,12 +33,13 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 - [x] Implement fail-fast orchestrator, manifest validation and machine-readable JSON reports.
 - [x] Implement story adapter using the approved content; preserve exactly 24 bilingual page records.
 - [x] Implement character bible, fixed palette, scene cast map and deterministic scene prompts.
-- [x] Implement Pillow procedural illustration agent with fixed locomotive geometry and deterministic per-page seeds.
+- [x] Implement standard-library SVG illustration agent with fixed locomotive geometry and deterministic per-page seeds.
 - [x] Add standard-library regression tests for page contracts, character mappings, manifest/profile and orchestrator outputs.
 - [x] Add a quality workflow for compile, tests and JSON validation.
 - [ ] Add story quality checks: age suitability, readability, repeated phrases, continuity, learning goal and prohibited-content checks.
 - [ ] Run image generation on Actions and inspect all 24 page proofs; procedural art is not yet approved production artwork.
-- [ ] Validate generated image integrity, dimensions, RGB mode and page-to-scene mapping in a dedicated test.
+- [x] Validate SVG XML, canvas dimensions, page mapping and deterministic output in regression tests.
+- [ ] Run generated SVGs through the print renderer and inspect the resulting PDF proofs.
 - [ ] Integrate the swarm into a manual production workflow after dependency provenance is resolved.
 - [ ] Integrate generated artwork with the existing renderer and visually verify text safe zones and odd/even gutter geometry.
 - [ ] Implement a separate KDP full-wrap cover builder using exact KDP calculator values for selected paper, ink and page count.
@@ -79,14 +80,14 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 
 ## Current blockers
 
-1. **Procedural artwork needs execution and human review.** The new Pillow agent can generate 24 deterministic, original vector-like raster illustrations, but it has not yet been run in the production runner or approved visually.
+1. **Procedural artwork needs execution and human review.** The new SVG agent can generate 24 deterministic, original vector illustrations without third-party image dependencies; it still needs full PDF integration and human visual approval.
 2. **Arabic paperback availability.** KDP's official Arabic help currently says paperback publishing in Arabic is unavailable. A bilingual Arabic/English print edition is therefore not guaranteed to be accepted. Resolve language/metadata eligibility before treating the print PDF as publishable.
 3. **No cover builder.** The current workflow produces an interior PDF only; KDP cover is a separate full-wrap file.
 4. **Dependency source provenance is not yet GitHub-only.** Current workflow uses pip's default package index and Ubuntu apt repositories; a full transitive dependency provenance audit and replacement/pinning plan is required.
-5. **No true local LLM/diffusion in CI.** The first release uses deterministic story adapters and original Pillow-generated illustrations. Heavy model inference is explicitly out of scope for hosted runners.
+5. **No true local LLM/diffusion in CI.** The first release uses deterministic story adapters and original SVG illustrations. Heavy model inference is explicitly out of scope for hosted runners.
 
 ## Phase 3 implementation checkpoint
 
-The feature branch `feature/deterministic-swarm-phase-3` contains the manifest/schema, KDP profile, book configuration, character bible, story and character agents, Pillow illustration agent, orchestrator, regression tests and quality workflow. These changes are not yet merged to `main`; the production renderer and existing build workflow remain unchanged.
+The feature branch `feature/deterministic-swarm-phase-3` contains the manifest/schema, KDP profile, book configuration, character bible, story and character agents, SVG illustration agent, orchestrator, regression tests and quality workflow. These changes are not yet merged to `main`; the production renderer and existing build workflow remain unchanged.
 
 Next: execute the quality workflow, fix any CI findings, then run and inspect the procedural artwork generation before connecting it to the print renderer.
