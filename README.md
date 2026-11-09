@@ -10,6 +10,7 @@ The feature branch `feature/deterministic-swarm-phase-3` adds:
 - Story and character agents that emit stable JSON.
 - A pure-standard-library SVG illustrator that produces original, resolution-independent vector scenes.
 - A fail-fast orchestrator and regression tests.
+- An EPUB 3 exporter and a zero-JavaScript static website exporter, both using the same 24 SVG assets.
 
 Run planning and scene validation:
 
@@ -25,7 +26,7 @@ python -m book.agents.orchestrator --generate-art
 python -m book.inputs
 ```
 
-Generated files are written to `assets/artwork/page-01.svg` … `page-24.svg`. Review all images before using them in a print book. Successful generation is not artistic approval.
+Generated files are written to `assets/artwork/page-01.svg` … `page-24.svg`. Build all digital outputs with `python -m book.agents.orchestrator --generate-art --build-epub --build-site`. The EPUB is written to `dist/publish/` and the static website to `dist/site/`. Review all images before using them in a print book; successful generation is not artistic approval.
 
 ## Existing print pipeline
 
