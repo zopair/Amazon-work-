@@ -85,7 +85,7 @@ jobs:
         uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: happy-little-train-generated-artwork
-          path: dist
+          path: .
       - name: Verify Java runtime
         run: java -version
       - name: Download and verify EPUBCheck 5.4.0 from its GitHub release
