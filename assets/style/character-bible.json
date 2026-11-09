@@ -1,0 +1,77 @@
+{
+  "schema_version": "1.0",
+  "style": {
+    "name": "Happy Little Train",
+    "rendering": "original_flat_storybook_illustration",
+    "outline": "soft_dark_brown",
+    "line_weight_ratio": 0.009,
+    "lighting": "soft_daylight",
+    "background": "pastel_landscape",
+    "no_text_in_artwork": true,
+    "palette": {
+      "sky": "#BFE8F5",
+      "grass": "#B7DDA5",
+      "outline": "#59483F",
+      "train_red": "#E85D5D",
+      "train_yellow": "#F6C85F",
+      "train_blue": "#5A9BD5",
+      "train_green": "#72B788",
+      "window": "#D9F2F7",
+      "wheel": "#655B58",
+      "cloud": "#FFFDF7"
+    }
+  },
+  "characters": {
+    "choo_choo": {
+      "kind": "train",
+      "body": "small rounded red locomotive",
+      "face": "two round eyes and a gentle smile on the front",
+      "fixed_features": ["red engine body", "yellow roof", "blue front bumper", "two dark wheels", "two round eyes", "small curved smile"],
+      "clothing": "none"
+    },
+    "bunny": {
+      "kind": "rabbit",
+      "body": "small cream-colored friendly rabbit",
+      "fixed_features": ["cream fur", "two long upright ears with pink inner ears", "round cheeks", "small nose"],
+      "clothing": "none"
+    },
+    "elephant": {
+      "kind": "elephant",
+      "body": "small soft-gray friendly elephant",
+      "fixed_features": ["gray body", "large rounded ears", "short curved trunk", "small dark eyes"],
+      "clothing": "none"
+    },
+    "bird": {
+      "kind": "bird",
+      "body": "small golden-yellow friendly bird",
+      "fixed_features": ["yellow body", "orange beak", "two small wings", "tiny feet"],
+      "clothing": "none"
+    }
+  },
+  "scene_cast": {
+    "cover": ["choo_choo"],
+    "train": ["choo_choo"],
+    "red": ["choo_choo"],
+    "yellow": ["choo_choo"],
+    "blue": ["choo_choo"],
+    "green": ["choo_choo"],
+    "orange": ["choo_choo"],
+    "purple": ["choo_choo"],
+    "pink": ["choo_choo"],
+    "white": ["choo_choo"],
+    "brown": ["choo_choo"],
+    "count": ["choo_choo"],
+    "bunny": ["choo_choo", "bunny"],
+    "elephant": ["choo_choo", "elephant"],
+    "song": ["choo_choo"],
+    "shapes": ["choo_choo"],
+    "numbers": ["choo_choo"],
+    "feelings": ["choo_choo"],
+    "bird": ["choo_choo", "bird"],
+    "rainbow": ["choo_choo"],
+    "party": ["choo_choo"],
+    "sleep": ["choo_choo"],
+    "friends": ["choo_choo", "bird", "bunny"],
+    "end": ["choo_choo"]
+  }
+}
