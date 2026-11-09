@@ -118,6 +118,9 @@ jobs:
           qpdf --check dist/the-happy-little-train-print.pdf
           pdfinfo dist/the-happy-little-train-print.pdf
 
+      - name: Build KDP paperback full-wrap cover
+        run: python -m book.cover --pages 24
+
       - name: Render visual proof images
         run: |
           mkdir -p dist/proof
@@ -135,6 +138,8 @@ jobs:
           name: happy-little-train-print-ready
           path: |
             dist/the-happy-little-train-print.pdf
+            dist/the-happy-little-train-cover.pdf
+            dist/cover-preflight.json
             dist/proof/
             dist/swarm/
           if-no-files-found: error
