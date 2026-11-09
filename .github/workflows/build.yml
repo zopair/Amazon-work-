@@ -1,100 +1,85 @@
-name: Build bilingual children's book
+name: Happy Little Train — production print pipeline
 
 on:
-  workflow_dispatch:
   push:
     branches: [main]
-    paths-ignore:
-      - 'dist/**'
+    tags: ['v*']
+  workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
-  group: build-print-book
+  group: happy-little-train-print
   cancel-in-progress: false
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
     steps:
-      - name: Check out repository
+      - name: Checkout source
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
-          python-version: '3.11'
+          python-version: '3.12'
           cache: pip
 
-      - name: Install fonts
+      - name: Install native rendering stack and Arabic fonts
         run: |
           sudo apt-get update
-          sudo apt-get install -y fonts-dejavu-core qpdf poppler-utils
-          # DejaVu Sans is distributed under a permissive open font license
-          # and includes Arabic glyphs; arabic-reshaper + python-bidi shape RTL text.
+          sudo apt-get install -y --no-install-recommends \
+            libpango-1.0-0 libpangocairo-1.0-0 libcairo2 libgdk-pixbuf-2.0-0 \
+            shared-mime-info fontconfig fonts-noto-core fonts-dejavu-core \
+            qpdf poppler-utils
+          fc-match "Noto Naskh Arabic"
+          fc-match "Noto Sans"
 
       - name: Install Python dependencies
-        run: python -m pip install --upgrade pip && pip install -r requirements.txt
-
-      - name: Generate and validate PDF
         run: |
-          python generate_book.py
-          python - <<'PY'
-          from pypdf import PdfReader
-          from pathlib import Path
-          pdf = Path("dist/the-happy-little-train-print.pdf")
-          reader = PdfReader(str(pdf))
-          assert len(reader.pages) == 24, f"Expected 24 pages, got {len(reader.pages)}"
-          box = reader.pages[0].mediabox
-          expected = (8.625 * 72, 8.75 * 72)
-          assert abs(float(box.width) - expected[0]) < 0.2
-          assert abs(float(box.height) - expected[1]) < 0.2
-          assert len(reader.pages) == 24, "KDP color paperback minimum is 24 pages"
-          for index, page in enumerate(reader.pages, 1):
-              trim = page.trimbox
-              bleed = page.bleedbox
-              assert abs(float(trim.width) - 612) < 0.2, f"Page {index}: incorrect trim width"
-              assert abs(float(trim.height) - 612) < 0.2, f"Page {index}: incorrect trim height"
-              assert abs(float(bleed.width) - 621) < 0.2, f"Page {index}: incorrect bleed width"
-              assert abs(float(bleed.height) - 630) < 0.2, f"Page {index}: incorrect bleed height"
-              text = page.extract_text() or ""
-              assert "Mom's Turn:" in text, f"Page {index}: missing interactive prompt"
-              assert any(0x0600 <= ord(ch) <= 0x06ff or 0xfb50 <= ord(ch) <= 0xfdff or 0xfe70 <= ord(ch) <= 0xfeff for ch in text), f"Page {index}: missing Arabic text"
-          fonts = reader.pages[0]["/Resources"]["/Font"].get_object()
-          embedded_arabic = False
-          for font_ref in fonts.values():
-              font = font_ref.get_object()
-              if "DejaVuSans" in str(font.get("/BaseFont")):
-                  descriptor = font["/FontDescriptor"].get_object()
-                  embedded_arabic = bool(descriptor.get("/FontFile2") or descriptor.get("/FontFile3"))
-          assert embedded_arabic, "Arabic/English DejaVu font is not embedded"
-          print("Validated 24 pages, trim 612 x 612 pt, full-bleed media 621 x 630 pt, Arabic text and embedded font")
-          PY
-          qpdf --check dist/the-happy-little-train-print.pdf
-          pdftoppm -f 1 -l 1 -r 72 -png -singlefile dist/the-happy-little-train-print.pdf /tmp/book-cover-preview
-          test -s /tmp/book-cover-preview.png
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Upload print PDF artifact
+      - name: Validate original artwork inputs (hard gate)
+        id: artwork
+        run: python -m book.inputs --report dist/artwork-preflight.json
+
+      - name: Render print PDF with WeasyPrint/Pango
+        run: python -m book.render
+
+      - name: Structural and bilingual PDF preflight
+        run: |
+          python -m book.preflight dist/the-happy-little-train-print.pdf
+          qpdf --check dist/the-happy-little-train-print.pdf
+          pdfinfo dist/the-happy-little-train-print.pdf
+
+      - name: Render visual proof sheets
+        run: |
+          mkdir -p dist/proof
+          pdftoppm -r 90 -png dist/the-happy-little-train-print.pdf dist/proof/page
+          python - <<'PY'
+          from pathlib import Path
+          pages = list(Path("dist/proof").glob("page-*.png"))
+          assert len(pages) == 24, f"Expected 24 proof images, got {len(pages)}"
+          print(f"Rendered {len(pages)} page proofs.")
+          PY
+
+      - name: Upload print PDF and proof images
         uses: actions/upload-artifact@v4
         with:
-          name: happy-little-train-print-pdf
-          path: dist/the-happy-little-train-print.pdf
+          name: happy-little-train-print-ready
+          path: |
+            dist/the-happy-little-train-print.pdf
+            dist/proof/
+            dist/artwork-preflight.json
           if-no-files-found: error
           retention-days: 30
 
-      - name: Commit generated PDF to repository
-        run: |
-          git config user.name "github-actions[bot]"
-          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add dist/the-happy-little-train-print.pdf
-          if git diff --cached --quiet; then
-            echo "Generated PDF is unchanged; nothing to commit."
-          else
-            git commit -m "Build print-ready bilingual children's book PDF"
-            # Rebase if another source commit lands while the PDF is being built.
-            git pull --rebase origin main
-            git push
-          fi
+      - name: Publish tagged GitHub Release
+        if: startsWith(github.ref, 'refs/tags/v')
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/the-happy-little-train-print.pdf
+          generate_release_notes: true
