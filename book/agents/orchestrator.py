@@ -6,6 +6,7 @@ import json
 from pathlib import Path
 
 from .character_agent import build_scene_plan, load_bible
+from .localization_agent import audit_locales
 from .story_agent import build_story
 
 ROOT = Path(__file__).resolve().parents[2]
@@ -47,12 +48,14 @@ def run(manifest_path: Path, profile_path: Path, generate_art: bool = False, see
     story = build_story()
     if story["page_count"] != manifest["page_count"]:
         raise ValueError("Manifest and approved manuscript page counts differ")
+    localization_report = audit_locales(story, manifest["locales"])
     bible_path = ROOT / manifest.get("character_bible", "assets/style/character-bible.json")
     bible = load_bible(bible_path)
     scene_plan = build_scene_plan(story, bible)
     output = ROOT / "dist" / "swarm"
     _write_json(output / "story.json", story)
     _write_json(output / "scene-plan.json", scene_plan)
+    _write_json(output / "localization-report.json", localization_report)
 
     artwork_status = "not_generated"
     if generate_art:
@@ -90,6 +93,7 @@ def run(manifest_path: Path, profile_path: Path, generate_art: bool = False, see
         "status": "PASS" if not generate_art or artwork_status == "generated" else "PLANNED",
         "story_pages": story["page_count"],
         "scene_count": scene_plan["scene_count"],
+        "localization_status": localization_report["status"],
         "artwork_status": artwork_status,
         "structural_status": "NOT_YET_RENDERED",
         "kdp_status": "STRUCTURALLY_VALIDATED_NOT_KDP_APPROVED",
