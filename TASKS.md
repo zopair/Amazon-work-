@@ -41,7 +41,8 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 - [x] Validate SVG XML, canvas dimensions, page mapping and deterministic output in regression tests.
 - [ ] Run generated SVGs through the print renderer and inspect the resulting PDF proofs.
 - [x] Integrate deterministic artwork generation into the existing print workflow and add manual seed/preview-only inputs; dependency provenance remains unresolved.
-- [ ] Run the integrated print workflow and verify SVG embedding, text safe zones and odd/even gutter geometry from PDF proofs.
+- [x] Run the integrated print workflow: 24-page PDF generated, SVG vectors detected in PDF streams, Arabic/English text and embedded fonts validated, and qpdf passed.
+- [x] Render all 24 page proofs; inspect the full contact sheet and sample full-resolution pages for layout and safe-zone issues.
 - [ ] Implement a separate KDP full-wrap cover builder using exact KDP calculator values for selected paper, ink and page count.
 - [ ] Add font licensing notices and pin tested Arabic font versions.
 - [ ] Add unit/integration tests for all geometry and content contracts.
@@ -60,11 +61,11 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 
 ## Phase 5 — Trial book and acceptance
 
-- [ ] Generate all 24 original illustrations.
-- [ ] Render the 24-page interior PDF.
+- [x] Generate all 24 original vector illustrations.
+- [x] Render the 24-page interior PDF (GitHub Actions artifact; 170,499 bytes).
 - [ ] Generate the full-wrap cover PDF.
-- [ ] Run content, image, font, geometry and qpdf checks.
-- [ ] Render every page to proof PNG and inspect a contact sheet plus sampled full-resolution pages.
+- [x] Run content, image, font, geometry and qpdf checks; all structural checks passed.
+- [x] Render all 24 page proofs and inspect the contact sheet plus sampled full-resolution pages.
 - [ ] Confirm the KDP profile against the selected marketplace and current KDP calculator.
 - [ ] Run KDP Print Previewer manually and resolve every warning.
 - [ ] Mark the artifact `STRUCTURALLY_VALIDATED_NOT_KDP_APPROVED` until Previewer and language eligibility are confirmed.
@@ -90,4 +91,4 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 
 The feature branch `feature/deterministic-swarm-phase-3` contains the manifest/schema, KDP profile, book configuration, character bible, story and character agents, SVG illustration agent, orchestrator, regression tests, quality workflow and updated print workflow. The renderer now accepts SVG assets; the PDF workflow has not yet been executed on this branch.
 
-Next: execute the integrated PDF build, inspect all page proofs, correct any renderer/preflight findings, and only then consider merging.
+Next: implement EPUB/static web outputs, perform a complete page-by-page editorial/art review, resolve dependency provenance and KDP language eligibility, then calculate/build the separate wrap cover. Keep the PR unmerged until these gates are addressed.
