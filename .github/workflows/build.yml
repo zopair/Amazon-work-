@@ -62,7 +62,7 @@ jobs:
               assert abs(float(bleed.height) - 630) < 0.2, f"Page {index}: incorrect bleed height"
               text = page.extract_text() or ""
               assert "Mom's Turn:" in text, f"Page {index}: missing interactive prompt"
-              assert any(0x0600 <= ord(ch) <= 0x06ff for ch in text), f"Page {index}: missing Arabic text"
+              assert any(0x0600 <= ord(ch) <= 0x06ff or 0xfb50 <= ord(ch) <= 0xfdff or 0xfe70 <= ord(ch) <= 0xfeff for ch in text), f"Page {index}: missing Arabic text"
           fonts = reader.pages[0]["/Resources"]["/Font"].get_object()
           embedded_arabic = False
           for font_ref in fonts.values():
