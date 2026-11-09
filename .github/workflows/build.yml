@@ -33,10 +33,8 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y fonts-dejavu-core
-          mkdir -p assets/fonts
-          curl --fail --location --retry 3 \
-            'https://raw.githubusercontent.com/google/fonts/main/ofl/notonaskharabic/NotoNaskhArabic%5Bwght%5D.ttf' \
-            --output assets/fonts/NotoNaskhArabic.ttf
+          # DejaVu Sans is distributed under a permissive open font license
+          # and includes Arabic glyphs; arabic-reshaper + python-bidi shape RTL text.
 
       - name: Install Python dependencies
         run: python -m pip install --upgrade pip && pip install -r requirements.txt
