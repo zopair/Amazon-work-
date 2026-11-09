@@ -42,13 +42,15 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 - [ ] Add optional offline translation engine only after model/package licensing, model size and runner-resource constraints are proven.
 - [x] Generate all 24 deterministic SVG illustrations on GitHub Actions and inspect the 24-page contact sheet; art remains a prototype pending print-proof review.
 - [x] Validate SVG XML, canvas dimensions, page mapping and deterministic output in regression tests.
-- [ ] Run generated SVGs through the print renderer and inspect the resulting PDF proofs.
+- [x] Run generated SVGs through the print renderer and inspect the resulting PDF proofs.
 - [x] Integrate deterministic artwork generation into the existing print workflow and add manual seed/preview-only inputs; dependency provenance remains unresolved.
 - [x] Run the integrated print workflow: 24-page PDF generated, SVG vectors detected in PDF streams, Arabic/English text and embedded fonts validated, and qpdf passed.
 - [x] Render all 24 page proofs; inspect the full contact sheet and sample full-resolution pages for layout and safe-zone issues.
-- [ ] Implement a separate KDP full-wrap cover builder using exact KDP calculator values for selected paper, ink and page count.
+- [x] Implement a separate paperback full-wrap cover builder using KDP's published paper multiplier, trim dimensions and 0.125-inch bleed; suppress spine text below 80 pages.
+- [ ] Verify generated cover geometry against a fresh KDP Cover Calculator template for the chosen marketplace before upload.
 - [ ] Add font licensing notices and pin tested Arabic font versions.
-- [ ] Add unit/integration tests for all geometry and content contracts.
+- [x] Add unit tests for 24-page Premium Color spine width, full-wrap width/height, and invalid page-count/paper profiles.
+- [ ] Add integration tests for cover PDF page boxes and visual safe-zone inspection.
 
 ## Phase 4 — GitHub Actions automation
 
@@ -86,12 +88,12 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 
 1. **Procedural artwork is generated but not production-approved.** GitHub Actions generated 24 SVGs and the 24-page contact sheet was visually inspected. Full PDF proof inspection and human approval remain required.
 2. **Arabic paperback availability.** KDP's official Arabic help currently says paperback publishing in Arabic is unavailable. A bilingual Arabic/English print edition is therefore not guaranteed to be accepted. Resolve language/metadata eligibility before treating the print PDF as publishable.
-3. **No cover builder.** The current workflow produces an interior PDF only; KDP cover is a separate full-wrap file.
+3. **Cover template verification.** A separate paperback full-wrap PDF builder now exists; its computed geometry still requires comparison with the final KDP Cover Calculator template. The 24-page spine is too narrow for spine text.
 4. **Dependency source provenance is not yet GitHub-only.** Current workflow uses pip's default package index and Ubuntu apt repositories; a full transitive dependency provenance audit and replacement/pinning plan is required.
 5. **No true local LLM/diffusion in CI.** The first release uses deterministic story adapters and original SVG illustrations. Heavy model inference is explicitly out of scope for hosted runners.
 
 ## Phase 3 implementation checkpoint
 
-The feature branch `feature/deterministic-swarm-phase-3` contains the manifest/schema, KDP profile, book configuration, character bible, story/character/SVG agents, EPUB/static-site publisher, orchestrator, regression tests and integrated Actions workflows. PDF, EPUB and static site generation all passed CI. The renderer now accepts SVG assets; the PDF workflow has not yet been executed on this branch.
+The feature branch `feature/deterministic-swarm-phase-3` contains the manifest/schema, KDP profile, book configuration, character bible, story/character/SVG/localization agents, EPUB/static-site publisher, orchestrator, regression tests and integrated Actions workflows. The 24-page PDF, EPUB and static site have passed GitHub Actions. A separate KDP paperback cover builder and KDP geometry unit tests have now been added. The latest cover and EPUBCheck workflow changes are awaiting CI results.
 
-Next: add a true translation/localization QA stage, perform a complete page-by-page editorial/art review, resolve dependency provenance and KDP language eligibility, then calculate/build the separate wrap cover. Keep the PR unmerged until these gates are addressed.
+Next: inspect the newly generated cover PDF and EPUBCheck output, run page-by-page editorial/art approval, resolve dependency provenance and KDP language eligibility, and compare the cover against the live KDP template. Keep the PR unmerged until these gates are addressed.
