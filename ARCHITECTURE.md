@@ -58,6 +58,7 @@ The feature branch `feature/deterministic-swarm-phase-3` introduces:
 - `book/agents/story_agent.py`: maps the approved 24-page manuscript into locale-keyed JSON.
 - `book/agents/character_agent.py`: validates cast and emits deterministic scene prompts.
 - `book/agents/art_agent.py`: renders original procedural SVG artwork with a 2588 x 1716 canvas and a fixed 1294 x 858 viewBox; no Pillow is required for illustration generation.
+- `book/agents/publisher_agent.py`: pure-standard-library EPUB 3 and zero-JavaScript static-site exporters.
 - `book/agents/orchestrator.py`: fail-fast stage runner, manifest validation and JSON reports.
 - `tests/test_swarm.py`: standard-library regression suite.
 - `.github/workflows/quality.yml`: Python compile/tests/JSON validation, read-only permissions.
@@ -91,9 +92,9 @@ SVG artwork is vector-based and does not require raster DPI upscaling; raster up
 ## 6. Workflow and resource controls
 
 - `quality.yml` runs standard-library tests and JSON validation on pushes, pull requests and manual dispatch.
-- `swarm-artwork.yml` generates and packages 24 SVGs without installing any Python third-party packages.
+- `swarm-artwork.yml` generates and packages 24 SVGs, EPUB 3, static web files and JSON reports without installing any Python third-party packages.
 - `build.yml` now generates the artwork, audits it, transfers it to the renderer job and offers manual `seed` and `preview_only` inputs.
-- The full print workflow passed on GitHub Actions: 24-page PDF, SVG artwork, Arabic/English text, embedded fonts, MediaBox/TrimBox/BleedBox checks, qpdf and 24 page-proof PNGs.
+- The full print workflow passed on GitHub Actions: 24-page PDF, SVG artwork, Arabic/English text, embedded fonts, MediaBox/TrimBox/BleedBox checks, qpdf and 24 page-proof PNGs. EPUB 3 and static-site publishers also passed regression tests; EPUB ZIP/XML integrity was verified.
 - The PDF is structurally validated only; KDP Print Previewer, complete editorial review, cover and language eligibility remain pending.
 - No secrets, paid APIs, external queues or automated KDP account interactions are required by the new agents.
 - Generated artwork and PDFs should remain CI artifacts, not Git history.
