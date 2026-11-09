@@ -18,13 +18,13 @@ jobs:
     timeout-minutes: 8
     steps:
       - name: Checkout source
-        uses: actions/checkout@v4
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
       - name: Generate story, scene plan and 24 SVG illustrations
         run: python -m book.agents.orchestrator --generate-art --build-epub --build-site
       - name: Run standard-library artwork and contract tests
         run: python -m unittest discover -s tests -v
       - name: Upload vector artwork and generation reports
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
         with:
           name: happy-little-train-vector-artwork
           path: |
