@@ -34,10 +34,12 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 - [x] Implement fail-fast orchestrator, manifest validation and machine-readable JSON reports.
 - [x] Implement story adapter using the approved content; preserve exactly 24 bilingual page records.
 - [x] Implement character bible, fixed palette, scene cast map and deterministic scene prompts.
+- [x] Implement localization QA for English/Arabic completeness, script presence, Unicode normalization and RTL/LTR direction; it validates approved copy and does not fabricate translations.
 - [x] Implement standard-library SVG illustration agent with fixed locomotive geometry and deterministic per-page seeds.
 - [x] Add standard-library regression tests for page contracts, character mappings, manifest/profile and orchestrator outputs.
 - [x] Add a quality workflow for compile, tests and JSON validation.
 - [ ] Add story quality checks: age suitability, readability, repeated phrases, continuity, learning goal and prohibited-content checks.
+- [ ] Add optional offline translation engine only after model/package licensing, model size and runner-resource constraints are proven.
 - [x] Generate all 24 deterministic SVG illustrations on GitHub Actions and inspect the 24-page contact sheet; art remains a prototype pending print-proof review.
 - [x] Validate SVG XML, canvas dimensions, page mapping and deterministic output in regression tests.
 - [ ] Run generated SVGs through the print renderer and inspect the resulting PDF proofs.
