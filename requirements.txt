@@ -1,2 +1,17 @@
+# Direct runtime dependencies
 WeasyPrint==68.1
 pypdf==5.1.0
+
+# Locked transitive dependencies resolved by the successful Python 3.12 CI build
+pydyf==0.13.0
+cffi==2.1.1
+tinyhtml5==2.1.0
+tinycss2==1.5.1
+cssselect2==0.10.1
+Pyphen==0.18.1
+Pillow==13.0.0
+fonttools==4.68.0
+pycparser==3.12
+webencodings==0.6.1
+brotli==1.2.1
+zopfli==0.4.3
