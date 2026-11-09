@@ -101,9 +101,9 @@ def scene(c,kind):
 def main():
     ap=argparse.ArgumentParser(); ap.add_argument("--output",default="dist/the-happy-little-train-print.pdf"); args=ap.parse_args()
     if len(PAGES)!=24: raise RuntimeError(f"Expected 24 pages; got {len(PAGES)}")
-    f=Path("assets/fonts/NotoNaskhArabic.ttf")
-    en=Path("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf")
-    if not f.exists() or not en.exists(): raise FileNotFoundError("Required fonts missing. Run the GitHub Actions workflow or install fonts as documented.")
+    f=Path("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf")
+    en=f
+    if not f.exists(): raise FileNotFoundError("DejaVu Sans missing; install the fonts-dejavu-core system package.")
     pdfmetrics.registerFont(TTFont("Arabic",str(f))); pdfmetrics.registerFont(TTFont("English",str(en)))
     out=Path(args.output); out.parent.mkdir(parents=True,exist_ok=True)
     c=canvas.Canvas(str(out),pagesize=(PW,PH),pageCompression=1)
