@@ -13,7 +13,8 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 - [x] Verify current KDP Arabic paperback restriction.
 - [x] Compare GitHub-native/open-source storybook references and reject paid API / heavyweight CI dependencies.
 - [x] Select deterministic, no-secret, low-resource architecture.
-- [ ] Re-check licenses and pin exact versions/SHAs before importing any third-party source.
+- [x] Pin exact direct/transitive Python package versions and inventory upstream licenses/repos in `DEPENDENCIES.md`.
+- [x] Pin third-party GitHub Actions to immutable full commit SHAs.
 - [ ] Resolve strict GitHub-only dependency provenance: current pip default-index and apt-get installs are not GitHub-only; audit and replace/pin the complete transitive dependency chain or document a runner-image exception.
 
 ## Phase 2 — Project plan and structure
@@ -52,7 +53,7 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 - [x] Add PR/push quality workflow with least-privilege read-only permissions and timeout.
 - [x] Add manual workflow inputs for deterministic seed and preview-only mode (profile/format selection remains pending).
 - [x] Keep content audit, artwork generation/audit, PDF rendering, QA and artifact packaging as explicit jobs.
-- [ ] Pin all third-party Actions to reviewed full commit SHAs.
+- [x] Pin all third-party Actions to reviewed full commit SHAs.
 - [ ] Resolve strict dependency source provenance before claiming GitHub-only acquisition.
 - [ ] Use bounded artifact retention and resource/time budgets.
 - [x] Upload generated SVG artwork and JSON QA reports as a separate 14-day artifact; PDF proofs remain pending.
