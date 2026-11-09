@@ -63,7 +63,7 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 
 - [x] Generate all 24 original vector illustrations.
 - [x] Render the 24-page interior PDF (GitHub Actions artifact; 170,499 bytes).
-- [ ] Generate the full-wrap cover PDF.
+- [ ] Generate the full-wrap cover PDF (requires exact KDP calculator inputs).
 - [x] Run content, image, font, geometry and qpdf checks; all structural checks passed.
 - [x] Render all 24 page proofs and inspect the contact sheet plus sampled full-resolution pages.
 - [ ] Confirm the KDP profile against the selected marketplace and current KDP calculator.
@@ -89,6 +89,6 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 
 ## Phase 3 implementation checkpoint
 
-The feature branch `feature/deterministic-swarm-phase-3` contains the manifest/schema, KDP profile, book configuration, character bible, story and character agents, SVG illustration agent, orchestrator, regression tests, quality workflow and updated print workflow. The renderer now accepts SVG assets; the PDF workflow has not yet been executed on this branch.
+The feature branch `feature/deterministic-swarm-phase-3` contains the manifest/schema, KDP profile, book configuration, character bible, story/character/SVG agents, EPUB/static-site publisher, orchestrator, regression tests and integrated Actions workflows. PDF, EPUB and static site generation all passed CI. The renderer now accepts SVG assets; the PDF workflow has not yet been executed on this branch.
 
-Next: implement EPUB/static web outputs, perform a complete page-by-page editorial/art review, resolve dependency provenance and KDP language eligibility, then calculate/build the separate wrap cover. Keep the PR unmerged until these gates are addressed.
+Next: add a true translation/localization QA stage, perform a complete page-by-page editorial/art review, resolve dependency provenance and KDP language eligibility, then calculate/build the separate wrap cover. Keep the PR unmerged until these gates are addressed.
