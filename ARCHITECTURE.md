@@ -39,7 +39,7 @@ Official sources:
 | Orchestration | Python standard library | Lightweight, no remote queue, no secrets, deterministic |
 | Story Agent | Adapter over approved manuscript | Prevents unreviewed copy drift; not an LLM |
 | Character Agent | JSON Character Bible + scene-cast mapping | One canonical source for character features and style |
-| Illustrator Agent | Pillow drawing primitives | Original vector-like raster art; not diffusion painting or a substitute for visual review |
+| Illustrator Agent | Python standard-library SVG generation | Original resolution-independent vector art; no image package/model required; still requires visual review |
 | Layout | Existing WeasyPrint/Pango renderer | Kept unchanged until integration tests pass |
 | PDF QA | Existing pypdf/qpdf/Poppler checks | Structural validation does not guarantee KDP approval |
 | Delivery | GitHub Actions artifacts | No paid storage/server required |
@@ -57,7 +57,7 @@ The feature branch `feature/deterministic-swarm-phase-3` introduces:
 - `book/agents/contracts.py`: shared page-contract validation.
 - `book/agents/story_agent.py`: maps the approved 24-page manuscript into locale-keyed JSON.
 - `book/agents/character_agent.py`: validates cast and emits deterministic scene prompts.
-- `book/agents/art_agent.py`: renders original procedural artwork using Pillow; 2588 x 1716 RGB JPEG output at 300-DPI metadata.
+- `book/agents/art_agent.py`: renders original procedural SVG artwork with a 2588 x 1716 canvas and a fixed 1294 x 858 viewBox; no Pillow is required for illustration generation.
 - `book/agents/orchestrator.py`: fail-fast stage runner, manifest validation and JSON reports.
 - `tests/test_swarm.py`: standard-library regression suite.
 - `.github/workflows/quality.yml`: Python compile/tests/JSON validation, read-only permissions.
@@ -68,14 +68,14 @@ Run the metadata/scene planning locally with:
 python -m book.agents.orchestrator
 ```
 
-Generate the 24 procedural page images (Pillow must be installed):
+Generate the 24 procedural vector illustrations:
 
 ```bash
 python -m book.agents.orchestrator --generate-art
 python -m book.inputs
 ```
 
-The art agent uses no external image API, remote model, stock asset or secret. It is a deterministic illustration engine; human visual approval is still required before print production.
+The art agent uses only Python's standard library and no external image API, remote model, stock asset or secret. SVG is resolution-independent; human visual approval is still required before print production.
 
 ## 5. KDP interior profile
 
@@ -104,7 +104,7 @@ The existing print workflow installs Python packages with pip's default package 
 
 A future successful production run must provide:
 - Exactly 24 interior pages and the required MediaBox/TrimBox/BleedBox geometry.
-- 24 approved original RGB/RGBA illustrations meeting the placed-size threshold.
+- 24 approved original vector or raster illustrations meeting the placed-size threshold.
 - Embedded fonts, English/Arabic text extraction and no blank pages.
 - A separately calculated KDP full-wrap cover.
 - qpdf integrity, page proofs/contact sheet and machine-readable QA report.
