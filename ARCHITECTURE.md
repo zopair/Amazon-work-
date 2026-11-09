@@ -126,7 +126,11 @@ Agents are Python modules, not separate hosted AI services. The pipeline must be
 - Avoid automated account creation, scraping, repeated external API calls, artificial traffic or any KDP upload bot. The workflow creates files only; publishing remains a human-controlled KDP action.
 - Keep generated PDFs/proofs out of Git history; store them as Actions artifacts.
 
-## 7. Acceptance criteria
+## 7. Source-provenance constraint
+
+The current workflow installs Python packages with `pip` from its default package index and installs native libraries with `apt-get` from Ubuntu repositories. Therefore, despite the application and upstream projects being open source, the current dependency acquisition path does **not** yet satisfy a literal interpretation of “all tools/libraries must be fetched from GitHub only.” This is an explicit Phase 3 blocker: inventory the full transitive dependency graph, prefer GitHub-hosted release/source artifacts with pinned commit/tag and checksums, and document any runner-image/OS baseline exception. Do not claim strict GitHub-only provenance until that audit passes. If no reliable GitHub-only path exists for a dependency, replace it with a suitable lighter implementation rather than silently falling back to another registry.
+
+## 8. Acceptance criteria
 
 A successful CI run must produce:
 - Exactly 24 interior PDF pages.
@@ -138,6 +142,6 @@ A successful CI run must produce:
 - qpdf integrity check, contact sheet/page proofs, machine-readable QA report.
 - Explicit status: `STRUCTURALLY_VALIDATED_NOT_KDP_APPROVED` until the file passes the KDP Print Previewer and language/metadata eligibility checks.
 
-## 8. Important boundary
+## 9. Important boundary
 
 A GitHub-hosted CPU runner can reliably produce deterministic vector-like illustrations and books. It is not a practical free environment for repeated SDXL/FLUX diffusion generation. A real LLM/diffusion mode may be added only as an optional, user-controlled self-hosted runner profile; it must never silently introduce a paid API or external service.
