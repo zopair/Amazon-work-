@@ -36,7 +36,7 @@ def validate_manifest(manifest: dict, profile: dict) -> None:
         raise ValueError("seed must be a non-negative integer")
 
 
-def run(manifest_path: Path, profile_path: Path, generate_art: bool = False, seed_override: int | None = None) -> dict:
+def run(manifest_path: Path, profile_path: Path, generate_art: bool = False, seed_override: int | None = None, build_epub: bool = False, build_site: bool = False) -> dict:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     profiles = json.loads(profile_path.read_text(encoding="utf-8"))
     validate_manifest(manifest, profiles)
@@ -73,6 +73,17 @@ def run(manifest_path: Path, profile_path: Path, generate_art: bool = False, see
             "method": "Python standard-library SVG generation; no remote model/API",
         })
 
+    outputs = {}
+    if build_epub or build_site:
+        from .publisher_agent import build_epub as export_epub, build_static_site
+        artwork_dir = ROOT / manifest["artwork"]["output_dir"]
+        if build_epub:
+            epub_path = export_epub(story, manifest, artwork_dir, ROOT / "dist/publish/the-happy-little-train.epub")
+            outputs["epub"] = str(epub_path.relative_to(ROOT))
+        if build_site:
+            site_path = build_static_site(story, manifest, artwork_dir, ROOT / "dist/site")
+            outputs["static_site"] = str(site_path.relative_to(ROOT))
+
     report = {
         "book_id": manifest["book_id"],
         "seed": manifest["seed"],
@@ -83,6 +94,7 @@ def run(manifest_path: Path, profile_path: Path, generate_art: bool = False, see
         "structural_status": "NOT_YET_RENDERED",
         "kdp_status": "STRUCTURALLY_VALIDATED_NOT_KDP_APPROVED",
         "external_api_calls": 0,
+        "digital_outputs": outputs,
     }
     _write_json(output / "swarm-report.json", report)
     return report
@@ -94,8 +106,10 @@ def main() -> None:
     parser.add_argument("--profiles", default="config/kdp_profiles.json")
     parser.add_argument("--generate-art", action="store_true")
     parser.add_argument("--seed", type=int, default=None, help="Override the manifest seed for a reproducible run")
+    parser.add_argument("--build-epub", action="store_true", help="Build an EPUB 3 edition from generated SVG artwork")
+    parser.add_argument("--build-site", action="store_true", help="Build a zero-JavaScript static web edition")
     args = parser.parse_args()
-    report = run(ROOT / args.manifest, ROOT / args.profiles, args.generate_art, args.seed)
+    report = run(ROOT / args.manifest, ROOT / args.profiles, args.generate_art, args.seed, args.build_epub, args.build_site)
     print(json.dumps(report, ensure_ascii=False, indent=2))
 
 
