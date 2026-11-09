@@ -44,7 +44,7 @@ Official sources:
 | PDF QA | Existing pypdf/qpdf/Poppler checks | Structural validation does not guarantee KDP approval |
 | Delivery | GitHub Actions artifacts | No paid storage/server required |
 
-No CrewAI or Swarm framework is installed in the runtime. The agents are small Python modules with explicit JSON contracts. This avoids framework overhead and avoids representing deterministic scripts as autonomous LLM agents.
+No CrewAI or Swarm framework is installed in the runtime. The agents are small Python modules with explicit JSON contracts. The current story and localization agents adapt and validate the already-approved bilingual manuscript; they do not generate new prose or machine-translate. This avoids framework overhead and avoids representing deterministic scripts as autonomous LLM agents.
 
 ## 4. Feature-branch implementation
 
@@ -57,6 +57,7 @@ The feature branch `feature/deterministic-swarm-phase-3` introduces:
 - `book/agents/contracts.py`: shared page-contract validation.
 - `book/agents/story_agent.py`: maps the approved 24-page manuscript into locale-keyed JSON.
 - `book/agents/character_agent.py`: validates cast and emits deterministic scene prompts.
+- `book/agents/localization_agent.py`: checks bilingual field completeness, Arabic/Latin script presence, Unicode NFC status and RTL/LTR direction. It does not translate or invent copy.
 - `book/agents/art_agent.py`: renders original procedural SVG artwork with a 2588 x 1716 canvas and a fixed 1294 x 858 viewBox; no Pillow is required for illustration generation.
 - `book/agents/publisher_agent.py`: pure-standard-library EPUB 3 and zero-JavaScript static-site exporters.
 - `book/agents/orchestrator.py`: fail-fast stage runner, manifest validation and JSON reports.
@@ -94,7 +95,8 @@ SVG artwork is vector-based and does not require raster DPI upscaling; raster up
 - `quality.yml` runs standard-library tests and JSON validation on pushes, pull requests and manual dispatch.
 - `swarm-artwork.yml` generates and packages 24 SVGs, EPUB 3, static web files and JSON reports without installing any Python third-party packages.
 - `build.yml` now generates the artwork, audits it, transfers it to the renderer job and offers manual `seed` and `preview_only` inputs.
-- The full print workflow passed on GitHub Actions: 24-page PDF, SVG artwork, Arabic/English text, embedded fonts, MediaBox/TrimBox/BleedBox checks, qpdf and 24 page-proof PNGs. EPUB 3 and static-site publishers also passed regression tests; EPUB ZIP/XML integrity was verified.
+- The full print workflow passed on GitHub Actions using immutable Action SHAs and a fully pinned Python dependency graph: 24-page PDF, SVG artwork, Arabic/English text, embedded fonts, MediaBox/TrimBox/BleedBox checks, qpdf and 24 page-proof PNGs.
+- Localization QA, EPUB 3 and static-site regression tests passed. EPUB 3 and static-site publishers also passed regression tests; EPUB ZIP/XML integrity was verified.
 - The PDF is structurally validated only; KDP Print Previewer, complete editorial review, cover and language eligibility remain pending.
 - No secrets, paid APIs, external queues or automated KDP account interactions are required by the new agents.
 - Generated artwork and PDFs should remain CI artifacts, not Git history.
