@@ -1,0 +1,21 @@
+{
+  "schema_version": "1.0",
+  "profiles": {
+    "square-8.5-premium-color-24p": {
+      "trim_width_in": 8.5,
+      "trim_height_in": 8.5,
+      "bleed_top_in": 0.125,
+      "bleed_bottom_in": 0.125,
+      "bleed_outside_in": 0.125,
+      "media_width_in": 8.625,
+      "media_height_in": 8.75,
+      "minimum_inside_margin_in": 0.375,
+      "minimum_top_bottom_outside_margin_in": 0.375,
+      "minimum_pages": 24,
+      "color_mode": "premium_color",
+      "dpi": 300,
+      "cover_requires_calculator": true,
+      "publishing_status": "STRUCTURAL_PROFILE_ONLY"
+    }
+  }
+}
