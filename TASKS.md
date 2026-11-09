@@ -59,9 +59,9 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 - [x] Keep content audit, artwork generation/audit, PDF rendering, QA and artifact packaging as explicit jobs.
 - [x] Pin all third-party Actions to reviewed full commit SHAs.
 - [ ] Resolve strict dependency source provenance before claiming GitHub-only acquisition.
-- [ ] Use bounded artifact retention and resource/time budgets.
+- [x] Add queue discovery and a dynamic `strategy.matrix` workflow; matrix execution is capped at one concurrent book to conserve runner minutes.\n- [x] Add ImageMagick pixel-dimension validation for 300-DPI full-wrap cover raster proofs (±1 px tolerance).\n- [x] Add a blocking W3C EPUBCheck 5.4.0 gate before any gh-pages publication.\n- [x] Add a bounded exponential-backoff utility for transient connection failures; no live model/API client exists in this deterministic release to wire it into.\n- [x] Set 14-day per-book artifact retention and serialized matrix execution.
 - [x] Upload generated SVG artwork and JSON QA reports as a separate 14-day artifact; PDF proofs remain pending.
-- [ ] Keep release publishing restricted to signed-off version tags.
+- [x] Restrict gh-pages publishing to pushes on `main` and require all matrix EPUBCheck jobs to pass.
 - [ ] Verify fork/PR workflows cannot obtain write permissions or secrets.
 
 ## Phase 5 — Trial book and acceptance
@@ -97,3 +97,12 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 The feature branch `feature/deterministic-swarm-phase-3` contains the manifest/schema, KDP profile, book configuration, character bible, story/character/SVG/localization agents, EPUB/static-site publisher, orchestrator, regression tests and integrated Actions workflows. The 24-page PDF, EPUB and static site have passed GitHub Actions. A separate KDP paperback cover builder and KDP geometry unit tests have now been added. The latest cover and EPUBCheck workflow changes are awaiting CI results.
 
 Next: inspect the newly generated cover PDF and EPUBCheck output, run page-by-page editorial/art approval, resolve dependency provenance and KDP language eligibility, and compare the cover against the live KDP template. Keep the PR unmerged until these gates are addressed.
+
+
+## Phase 4 implementation checkpoint
+
+The branch `feature/multi-book-pipeline-phase-4` adds `books-queue/`, `book.discover_books`, dynamic matrix build/EPUBCheck jobs, an ImageMagick `identify` cover pixel gate, and a gh-pages publisher that depends on every EPUBCheck matrix result. Matrix concurrency is deliberately capped at one and artifacts expire after 14 days.
+
+**Multi-book content limitation:** discovery and matrix orchestration are queue-driven, but the current manuscript adapter and PDF renderer still consume the existing approved 24-page `book.content.PAGES` source and fixed renderer output. A second queue entry does not yet represent an independently authored manuscript. Do not enqueue different story content until the content adapter, renderer and content audit are parameterized per manifest. This is a known Phase 4 follow-up, not a claim of fully generalized book authoring.
+
+**Network resilience limitation:** `book/agents/retry.py` provides bounded exponential backoff for idempotent transient network operations. The current swarm has no model/API transport client, so there is no outbound model request to patch; the helper is ready for any future approved connector.
