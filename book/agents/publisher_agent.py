@@ -88,7 +88,7 @@ def build_epub(story: dict, manifest: dict, artwork_dir: Path, output_path: Path
     css = """html,body{margin:0;padding:0;font-family:serif;color:#403a35}
 .book-page{max-width:42rem;margin:0 auto;padding:1rem}
 .illustration{display:block;width:100%;height:auto;max-height:65vh;object-fit:contain}
-.english{text-align:left;direction:ltr;margin:1.5rem 0}
+.english{text-align:left;margin:1.5rem 0}
 .arabic{text-align:right;margin:1.5rem 0;font-family:serif}
 h1,h2{font-size:1.5rem;margin:.4rem 0}p{font-size:1.1rem;line-height:1.6}
 .parent-prompt{border-top:1px solid #ddd;padding-top:.5rem;font-size:.9rem}
