@@ -8,7 +8,6 @@ from pathlib import Path
 from .character_agent import build_scene_plan, load_bible
 from .story_agent import build_story
 
-
 ROOT = Path(__file__).resolve().parents[2]
 
 
@@ -31,7 +30,7 @@ def validate_manifest(manifest: dict, profile: dict) -> None:
         raise ValueError("This production release is locked to the approved 24-page manuscript")
     if manifest["kdp_profile"] not in profile["profiles"]:
         raise ValueError(f"Unknown KDP profile: {manifest['kdp_profile']}")
-    if manifest["artwork"]["mode"] not in ("procedural_pillow", "approved_external_art"):
+    if manifest["artwork"]["mode"] not in ("procedural_svg", "approved_external_art"):
         raise ValueError("Unsupported artwork mode")
     if not isinstance(manifest["seed"], int) or manifest["seed"] < 0:
         raise ValueError("seed must be a non-negative integer")
@@ -41,23 +40,20 @@ def run(manifest_path: Path, profile_path: Path, generate_art: bool = False) -> 
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     profiles = json.loads(profile_path.read_text(encoding="utf-8"))
     validate_manifest(manifest, profiles)
-
     story = build_story()
     if story["page_count"] != manifest["page_count"]:
         raise ValueError("Manifest and approved manuscript page counts differ")
-
     bible_path = ROOT / manifest.get("character_bible", "assets/style/character-bible.json")
     bible = load_bible(bible_path)
     scene_plan = build_scene_plan(story, bible)
-
     output = ROOT / "dist" / "swarm"
     _write_json(output / "story.json", story)
     _write_json(output / "scene-plan.json", scene_plan)
 
     artwork_status = "not_generated"
     if generate_art:
-        if manifest["artwork"]["mode"] != "procedural_pillow":
-            raise ValueError("This release only implements procedural_pillow artwork")
+        if manifest["artwork"]["mode"] != "procedural_svg":
+            raise ValueError("This release only implements procedural_svg artwork")
         from .art_agent import generate_all
         generated = generate_all(
             story, bible, ROOT / manifest["artwork"]["output_dir"],
@@ -69,8 +65,8 @@ def run(manifest_path: Path, profile_path: Path, generate_art: bool = False) -> 
             "count": len(generated),
             "files": [str(path.relative_to(ROOT)) for path in generated],
             "dimensions": [manifest["artwork"]["width"], manifest["artwork"]["height"]],
-            "dpi": 300,
-            "method": "Pillow procedural drawing; no remote model/API",
+            "resolution": "vector",
+            "method": "Python standard-library SVG generation; no remote model/API",
         })
 
     report = {
