@@ -33,7 +33,8 @@ Generated files are written to `assets/artwork/page-01.svg` … `page-24.svg`. R
 2. `assets/artwork/`: 24 original illustrations, required by the artwork gate.
 3. `book/render.py`: HTML/CSS pagination via WeasyPrint + Pango/HarfBuzz.
 4. `book/preflight.py`: PDF page count, MediaBox/TrimBox/BleedBox, bilingual text and embedded fonts.
-5. `.github/workflows/build.yml`: current print build, qpdf validation, page proofs and Actions artifact.
+5. `.github/workflows/build.yml`: generate SVG artwork, render the print PDF, run qpdf checks and upload page proofs.
+6. `.github/workflows/swarm-artwork.yml`: lightweight artwork-only generation and 14-day artifact workflow.
 
 Run the print pipeline locally after installing the system libraries/fonts listed in the existing workflow:
 
@@ -53,4 +54,4 @@ A 24-page, 8.5 × 8.5 in color paperback requires Premium Color under current KD
 
 ## Resource and dependency policy
 
-The new story, character and illustration agents use only the Python standard library; no API keys, paid model endpoints, cloud servers or model weights are required. The existing PDF renderer still depends on WeasyPrint, pypdf, Pillow for raster artwork validation, and native Ubuntu rendering libraries. Its complete dependency chain is not yet proven to be GitHub-only; pip and Ubuntu apt sources remain an explicit provenance-audit item.
+The story, character and illustration agents use only the Python standard library; no API keys, paid model endpoints, cloud servers or model weights are required. GitHub Actions has successfully generated all 24 SVG assets; the print PDF integration still needs an end-to-end run and proof inspection. The existing PDF renderer still depends on WeasyPrint, pypdf, Pillow for raster artwork validation, and native Ubuntu rendering libraries. Its complete dependency chain is not yet proven to be GitHub-only; pip and Ubuntu apt sources remain an explicit provenance-audit item.
