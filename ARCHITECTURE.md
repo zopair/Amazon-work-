@@ -120,3 +120,19 @@ A final publishable release must also provide:
 - Explicit status `STRUCTURALLY_VALIDATED_NOT_KDP_APPROVED` until KDP Previewer and language/metadata eligibility are confirmed.
 
 A free GitHub-hosted CPU runner is suitable for deterministic procedural artwork. It is not a practical free environment for repeated SDXL/FLUX diffusion inference. A true LLM/diffusion mode remains optional and must never silently introduce paid APIs or services.
+
+
+## Paperback full-wrap cover
+
+- `book/cover.py` calculates paperback cover geometry from the selected KDP profile and page count.
+- Premium Color paperback spine factor is 0.002347 inches per page; 24 pages produce a 0.056328-inch spine.
+- With 8.5 × 8.5-inch trim and 0.125-inch outside bleed, the 24-page full-wrap canvas is 17.306328 × 8.75 inches.
+- Spine text is suppressed because KDP only prints spine text above 79 pages.
+- The back panel reserves a blank 2 × 1.2-inch barcode area; KDP may place its barcode there.
+- The generated cover PDF is structurally prepared, not KDP-approved. Compare its geometry with a fresh KDP Cover Calculator template before upload.
+- Official reference: https://kdp.amazon.com/en_US/help/topic/G201953020
+
+## EPUB validation
+
+- The workflow downloads W3C EPUBCheck 5.4.0 from its official GitHub release and verifies the published SHA-256 digest before running it.
+- EPUBCheck is an official conformance checker; a passing result is separate from store-specific acceptance and editorial quality.
