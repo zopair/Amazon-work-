@@ -61,7 +61,6 @@ def make_html(paths: list[Path]) -> str:
               <div class="mom-ar" lang="ar" dir="rtl"><b>دور الأم:</b> {esc(ma)}</div>
             </div>
           </div>
-          <span class="folio">{n}</span>
         </section>""")
     return "<!doctype html><html lang='en'><head><meta charset='utf-8'></head><body>" + "".join(pages) + "</body></html>"
 
