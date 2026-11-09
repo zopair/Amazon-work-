@@ -3,7 +3,6 @@ from pathlib import Path
 import argparse
 import json
 import xml.etree.ElementTree as ET
-from PIL import Image
 from .content import PAGES
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -42,6 +41,10 @@ def main():
                 ok = w >= MIN_W and h >= MIN_H
                 mode, resolution = "VECTOR", "resolution-independent"
             else:
+                try:
+                    from PIL import Image
+                except ImportError as exc:
+                    raise RuntimeError("Pillow is required only when raster artwork is supplied; SVG is dependency-free") from exc
                 with Image.open(path) as im:
                     w, h, mode = im.width, im.height, im.mode
                     ok = w >= MIN_W and h >= MIN_H and mode in ("RGB", "RGBA")
