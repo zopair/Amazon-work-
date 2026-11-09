@@ -93,7 +93,8 @@ SVG artwork is vector-based and does not require raster DPI upscaling; raster up
 - `quality.yml` runs standard-library tests and JSON validation on pushes, pull requests and manual dispatch.
 - `swarm-artwork.yml` generates and packages 24 SVGs without installing any Python third-party packages.
 - `build.yml` now generates the artwork, audits it, transfers it to the renderer job and offers manual `seed` and `preview_only` inputs.
-- The complete print workflow has not yet been run on the feature branch.
+- The full print workflow passed on GitHub Actions: 24-page PDF, SVG artwork, Arabic/English text, embedded fonts, MediaBox/TrimBox/BleedBox checks, qpdf and 24 page-proof PNGs.
+- The PDF is structurally validated only; KDP Print Previewer, complete editorial review, cover and language eligibility remain pending.
 - No secrets, paid APIs, external queues or automated KDP account interactions are required by the new agents.
 - Generated artwork and PDFs should remain CI artifacts, not Git history.
 - All third-party Actions still need reviewed full-SHA pinning before production hardening.
@@ -104,7 +105,9 @@ The existing print workflow installs Python packages with pip's default package 
 
 ## 8. Acceptance and release boundary
 
-A future successful production run must provide:
+The latest successful Actions run produced a 24-page PDF (170,499 bytes) and 24 proof PNGs. The structural preflight passed. Its status remains `STRUCTURALLY_VALIDATED_NOT_KDP_APPROVED`.
+
+A final publishable release must also provide:
 - Exactly 24 interior pages and the required MediaBox/TrimBox/BleedBox geometry.
 - 24 approved original vector or raster illustrations meeting the placed-size threshold.
 - Embedded fonts, English/Arabic text extraction and no blank pages.
