@@ -69,18 +69,41 @@ def _train(p: dict) -> str:
 def _extra(key: str, outline: str) -> str:
     x, y = 955, 300
     if key == "bunny":
-        return (f'<g stroke="{outline}" stroke-width="5"><ellipse cx="{x+70}" cy="{y+105}" rx="66" ry="65" fill="#E9DCCB"/>'
-                f'<ellipse cx="{x+36}" cy="{y+10}" rx="23" ry="70" fill="#E9DCCB"/><ellipse cx="{x+100}" cy="{y+8}" rx="23" ry="70" fill="#E9DCCB"/>'
-                f'<ellipse cx="{x+36}" cy="{y+12}" rx="9" ry="48" fill="#E9A0B8" stroke="none"/><ellipse cx="{x+100}" cy="{y+10}" rx="9" ry="48" fill="#E9A0B8" stroke="none"/>'
-                f'<circle cx="{x+48}" cy="{y+90}" r="6" fill="{outline}"/><circle cx="{x+91}" cy="{y+90}" r="6" fill="{outline}"/><ellipse cx="{x+70}" cy="{y+112}" rx="9" ry="6" fill="#E9A0B8"/></g>')
+        return (f'<g stroke="{outline}" stroke-width="5" stroke-linejoin="round">'
+                f'<ellipse cx="{x+70}" cy="{y+155}" rx="61" ry="52" fill="#E9DCCB"/>'
+                f'<ellipse cx="{x+36}" cy="{y+10}" rx="23" ry="70" fill="#E9DCCB"/>'
+                f'<ellipse cx="{x+100}" cy="{y+8}" rx="23" ry="70" fill="#E9DCCB"/>'
+                f'<ellipse cx="{x+36}" cy="{y+12}" rx="9" ry="48" fill="#E9A0B8" stroke="none"/>'
+                f'<ellipse cx="{x+100}" cy="{y+10}" rx="9" ry="48" fill="#E9A0B8" stroke="none"/>'
+                f'<ellipse cx="{x+70}" cy="{y+85}" rx="57" ry="55" fill="#E9DCCB"/>'
+                f'<circle cx="{x+48}" cy="{y+78}" r="6" fill="{outline}"/>'
+                f'<circle cx="{x+91}" cy="{y+78}" r="6" fill="{outline}"/>'
+                f'<ellipse cx="{x+70}" cy="{y+99}" rx="9" ry="6" fill="#E9A0B8"/>'
+                f'<path d="M{x+58} {y+112} Q{x+70} {y+123} {x+82} {y+112}" fill="none"/>'
+                f'<ellipse cx="{x+35}" cy="{y+198}" rx="27" ry="15" fill="#E9DCCB"/>'
+                f'<ellipse cx="{x+105}" cy="{y+198}" rx="27" ry="15" fill="#E9DCCB"/></g>')
     if key == "elephant":
-        return (f'<g stroke="{outline}" stroke-width="5"><ellipse cx="{x+85}" cy="{y+100}" rx="86" ry="78" fill="#A9B8C5"/>'
-                f'<ellipse cx="{x+5}" cy="{y+98}" rx="48" ry="68" fill="#A9B8C5"/><path d="M{x+135} {y+125} Q{x+175} {y+195} {x+125} {y+220} Q{x+95} {y+235} {x+100} {y+205}" fill="none" stroke-width="19"/>'
-                f'<circle cx="{x+115}" cy="{y+80}" r="7" fill="{outline}"/></g>')
+        return (f'<g stroke="{outline}" stroke-width="5" stroke-linejoin="round">'
+                f'<ellipse cx="{x+90}" cy="{y+145}" rx="82" ry="65" fill="#A9B8C5"/>'
+                f'<ellipse cx="{x+8}" cy="{y+90}" rx="48" ry="68" fill="#A9B8C5"/>'
+                f'<ellipse cx="{x+75}" cy="{y+82}" rx="68" ry="62" fill="#A9B8C5"/>'
+                f'<path d="M{x+125} {y+105} Q{x+178} {y+155} {x+145} {y+205} Q{x+125} {y+235} {x+108} {y+205}" fill="none" stroke-width="19"/>'
+                f'<circle cx="{x+110}" cy="{y+65}" r="7" fill="{outline}"/>'
+                f'<rect x="{x+35}" y="{y+185}" width="28" height="48" rx="12" fill="#A9B8C5"/>'
+                f'<rect x="{x+125}" y="{y+185}" width="28" height="48" rx="12" fill="#A9B8C5"/></g>')
     if key in ("bird", "friends"):
-        return (f'<g stroke="{outline}" stroke-width="5"><ellipse cx="{x+70}" cy="{y+95}" rx="65" ry="55" fill="#F4CE55"/>'
-                f'<ellipse cx="{x+70}" cy="{y+110}" rx="34" ry="25" fill="#E8B843"/><path d="M{x+140} {y+80} L{x+190} {y+100} L{x+140} {y+120} Z" fill="#E98D43"/>'
-                f'<circle cx="{x+115}" cy="{y+80}" r="7" fill="{outline}"/></g>')
+        bird = (f'<g stroke="{outline}" stroke-width="5" stroke-linejoin="round">'
+                f'<ellipse cx="{x+70}" cy="{y+112}" rx="62" ry="48" fill="#F4CE55"/>'
+                f'<ellipse cx="{x+58}" cy="{y+115}" rx="31" ry="22" fill="#E8B843"/>'
+                f'<circle cx="{x+108}" cy="{y+68}" r="35" fill="#F4CE55"/>'
+                f'<path d="M{x+138} {y+62} L{x+188} {y+82} L{x+138} {y+98} Z" fill="#E98D43"/>'
+                f'<circle cx="{x+118}" cy="{y+58}" r="6" fill="{outline}"/>'
+                f'<path d="M{x+45} {y+155} l-8 20 M{x+80} {y+155} l8 20" fill="none" stroke-width="4"/>'
+                f'<path d="M{x+12} {y+90} L{x-20} {y+70} L{x+8} {y+130} Z" fill="#E9A0B8"/></g>')
+        if key == "friends":
+            bunny = _extra("bunny", outline)
+            return bird + bunny
+        return bird
     if key == "rainbow":
         colors = ("#E85D5D", "#F29E4C", "#F6C85F", "#72B788", "#5A9BD5", "#9B83C8")
         return "".join(f'<path d="M{x-20+i*5} {y+180+i*5} A{130-i*5} {130-i*5} 0 0 1 {x+240-i*5} {y+180+i*5}" fill="none" stroke="{c}" stroke-width="15"/>' for i,c in enumerate(colors))
