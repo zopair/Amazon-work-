@@ -1,7 +1,7 @@
 # AI Swarm Production Task List
 _Last reviewed: 2026-11-10_
 
-Legend: [x] verified / present, [ ] pending, [!] blocker or decision required.
+Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision required.
 
 ## Phase 1 — Repository and tool research
 
@@ -23,32 +23,36 @@ Legend: [x] verified / present, [ ] pending, [!] blocker or decision required.
 - [x] Define target directory structure.
 - [x] Record KDP publishing blocker and distinguish structural PDF validation from KDP approval.
 - [x] Create this task list and `ARCHITECTURE.md`.
-- [ ] Add `config/kdp_profiles.json` and `config/books/happy-little-train.json`.
-- [ ] Add JSON Schema for the book manifest.
-- [ ] Add agent package skeleton and orchestrator entry point.
-- [ ] Add tests before changing the production renderer.
+- [x] Add `config/kdp_profiles.json` and `config/books/happy-little-train.json`.
+- [x] Add JSON Schema for the book manifest.
+- [x] Add agent package skeleton and orchestrator entry point.
+- [x] Add tests before changing the production renderer.
 
 ## Phase 3 — Build the deterministic production swarm
 
-- [ ] Implement orchestrator with fail-fast stages, stable run IDs and JSON reports.
-- [ ] Implement story agent using approved content or explicit structured inputs; preserve 24-page count and bilingual fields.
-- [ ] Add story quality checks: age suitability, readability, repeated phrases, continuity, moral/learning goal and prohibited-content checks.
-- [ ] Implement character bible, art direction, fixed palette and deterministic scene prompts.
-- [ ] Implement Pillow-based original illustration generation for all 24 pages; no external image calls or downloaded stock art.
-- [ ] Validate each image's size, RGB/RGBA mode, file integrity and page-to-scene mapping.
-- [ ] Integrate generated artwork with the existing renderer.
-- [ ] Correct/verify text safe zones and per-side gutter geometry on odd/even pages.
-- [ ] Implement a separate KDP full-wrap cover builder using the exact KDP calculator values for trim, paper, ink and page count.
+- [x] Implement fail-fast orchestrator, manifest validation and machine-readable JSON reports.
+- [x] Implement story adapter using the approved content; preserve exactly 24 bilingual page records.
+- [x] Implement character bible, fixed palette, scene cast map and deterministic scene prompts.
+- [x] Implement Pillow procedural illustration agent with fixed locomotive geometry and deterministic per-page seeds.
+- [x] Add standard-library regression tests for page contracts, character mappings, manifest/profile and orchestrator outputs.
+- [x] Add a quality workflow for compile, tests and JSON validation.
+- [ ] Add story quality checks: age suitability, readability, repeated phrases, continuity, learning goal and prohibited-content checks.
+- [ ] Run image generation on Actions and inspect all 24 page proofs; procedural art is not yet approved production artwork.
+- [ ] Validate generated image integrity, dimensions, RGB mode and page-to-scene mapping in a dedicated test.
+- [ ] Integrate the swarm into a manual production workflow after dependency provenance is resolved.
+- [ ] Integrate generated artwork with the existing renderer and visually verify text safe zones and odd/even gutter geometry.
+- [ ] Implement a separate KDP full-wrap cover builder using exact KDP calculator values for selected paper, ink and page count.
 - [ ] Add font licensing notices and pin tested Arabic font versions.
 - [ ] Add unit/integration tests for all geometry and content contracts.
 
 ## Phase 4 — GitHub Actions automation
 
+- [x] Add PR/push quality workflow with least-privilege read-only permissions and timeout.
 - [ ] Add manual workflow inputs: book profile, seed, output format and optional preview-only mode.
-- [ ] Keep content, art, layout, QA and artifact packaging as explicit jobs/steps.
+- [ ] Keep content, art, layout, QA and artifact packaging as explicit jobs.
 - [ ] Pin all third-party Actions to reviewed full commit SHAs.
-- [ ] Use least-privilege permissions, job timeouts, concurrency and bounded artifact retention.
-- [ ] Cache only safe dependency downloads; do not cache generated personal content or credentials.
+- [ ] Resolve strict dependency source provenance before claiming GitHub-only acquisition.
+- [ ] Use bounded artifact retention and resource/time budgets.
 - [ ] Upload interior PDF, cover PDF, contact sheet, page proofs and JSON QA reports.
 - [ ] Keep release publishing restricted to signed-off version tags.
 - [ ] Verify fork/PR workflows cannot obtain write permissions or secrets.
@@ -75,17 +79,14 @@ Legend: [x] verified / present, [ ] pending, [!] blocker or decision required.
 
 ## Current blockers
 
-1. **No production artwork exists yet.** `assets/artwork/` currently contains only its README. The current pipeline correctly stops until 24 qualifying illustrations are supplied.
+1. **Procedural artwork needs execution and human review.** The new Pillow agent can generate 24 deterministic, original vector-like raster illustrations, but it has not yet been run in the production runner or approved visually.
 2. **Arabic paperback availability.** KDP's official Arabic help currently says paperback publishing in Arabic is unavailable. A bilingual Arabic/English print edition is therefore not guaranteed to be accepted. Resolve language/metadata eligibility before treating the print PDF as publishable.
 3. **No cover builder.** The current workflow produces an interior PDF only; KDP cover is a separate full-wrap file.
 4. **Dependency source provenance is not yet GitHub-only.** Current workflow uses pip's default package index and Ubuntu apt repositories; a full transitive dependency provenance audit and replacement/pinning plan is required.
-5. **No true local LLM/diffusion in CI.** To preserve free, low-resource GitHub-hosted execution, the first release uses deterministic story templates and original Pillow-generated illustrations. Heavy model inference is explicitly out of scope for hosted runners.
+5. **No true local LLM/diffusion in CI.** The first release uses deterministic story adapters and original Pillow-generated illustrations. Heavy model inference is explicitly out of scope for hosted runners.
 
-## Phase 2 exit criteria
+## Phase 3 implementation checkpoint
 
-- [x] Repository baseline documented.
-- [x] Technical choices and exclusions documented.
-- [x] KDP constraints and blockers documented.
-- [x] Work breakdown and target tree documented.
+The feature branch `feature/deterministic-swarm-phase-3` contains the manifest/schema, KDP profile, book configuration, character bible, story and character agents, Pillow illustration agent, orchestrator, regression tests and quality workflow. These changes are not yet merged to `main`; the production renderer and existing build workflow remain unchanged.
 
-Next: implement Phase 3 in a feature branch, starting with manifest schema, tests and the procedural illustration agent.
+Next: execute the quality workflow, fix any CI findings, then run and inspect the procedural artwork generation before connecting it to the print renderer.
