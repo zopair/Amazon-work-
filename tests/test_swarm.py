@@ -13,6 +13,7 @@ from book.agents.orchestrator import ROOT, run, validate_manifest
 from book.agents.publisher_agent import build_epub, build_static_site
 from book.agents.localization_agent import audit_locales
 from book.agents.story_agent import build_story
+from book.cover import calculate_cover_geometry
 
 
 class SwarmContractTests(unittest.TestCase):
@@ -51,6 +52,23 @@ class SwarmContractTests(unittest.TestCase):
         manifest = json.loads((ROOT / "config/books/happy-little-train.json").read_text(encoding="utf-8"))
         profiles = json.loads((ROOT / "config/kdp_profiles.json").read_text(encoding="utf-8"))
         validate_manifest(manifest, profiles)
+
+    def test_kdp_premium_color_cover_geometry_for_24_pages(self):
+        profiles = json.loads((ROOT / "config/kdp_profiles.json").read_text(encoding="utf-8"))
+        profile = profiles["profiles"]["square-8.5-premium-color-24p"]
+        geometry = calculate_cover_geometry(profile, 24)
+        self.assertAlmostEqual(geometry["spine_width_in"], 0.056328, places=6)
+        self.assertAlmostEqual(geometry["cover_width_in"], 17.306328, places=6)
+        self.assertAlmostEqual(geometry["cover_height_in"], 8.75, places=6)
+        self.assertFalse(geometry["spine_text_allowed"])
+
+    def test_kdp_cover_rejects_invalid_page_counts_and_paper_profiles(self):
+        profiles = json.loads((ROOT / "config/kdp_profiles.json").read_text(encoding="utf-8"))
+        profile = profiles["profiles"]["square-8.5-premium-color-24p"]
+        with self.assertRaises(ValueError):
+            calculate_cover_geometry(profile, 23)
+        with self.assertRaises(ValueError):
+            calculate_cover_geometry({**profile, "color_mode": "unknown"}, 24)
 
     def test_svg_illustrator_generates_24_valid_vector_pages(self):
         story = build_story()
