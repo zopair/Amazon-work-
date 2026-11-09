@@ -9,8 +9,10 @@ EXPECTED = (8.625 * 72, 8.75 * 72)
 TRIM = (8.5 * 72, 8.5 * 72)
 ARABIC_RANGES = ((0x0600,0x06FF),(0x0750,0x077F),(0x08A0,0x08FF),(0xFB50,0xFDFF),(0xFE70,0xFEFF))
 
+
 def has_arabic(text: str) -> bool:
     return any(any(a <= ord(ch) <= b for a,b in ARABIC_RANGES) for ch in text)
+
 
 def page_has_artwork(page) -> bool:
     resources = page.get("/Resources")
@@ -19,7 +21,10 @@ def page_has_artwork(page) -> bool:
     xobjects = resources.get_object().get("/XObject")
     if not xobjects:
         return False
-    return any(obj.get_object().get("/Subtype") == "/Image" for obj in xobjects.get_object().values())
+    # Raster images use /Image; WeasyPrint may represent SVG artwork as /Form.
+    return any(obj.get_object().get("/Subtype") in ("/Image", "/Form")
+               for obj in xobjects.get_object().values())
+
 
 def embedded_font(font) -> bool:
     font = font.get_object()
@@ -31,6 +36,7 @@ def embedded_font(font) -> bool:
     if descendants:
         return any(embedded_font(item) for item in descendants.get_object())
     return False
+
 
 def main():
     if not PDF.is_file() or PDF.stat().st_size < 20_000:
@@ -54,15 +60,16 @@ def main():
         if not text.strip():
             raise SystemExit(f"FAIL page {i}: empty text layer")
         if not page_has_artwork(page):
-            raise SystemExit(f"FAIL page {i}: original artwork image not embedded")
+            raise SystemExit(f"FAIL page {i}: original artwork not embedded")
         resources = page.get("/Resources")
         fonts = resources.get_object().get("/Font") if resources else None
         if not fonts or not fonts.get_object():
             raise SystemExit(f"FAIL page {i}: no font resources")
         if not any(embedded_font(ref) for ref in fonts.get_object().values()):
             raise SystemExit(f"FAIL page {i}: no embedded font program found")
-    print("PASS: 24 pages; KDP media/trim/bleed geometry; Arabic + English text; Mom's Turn; embedded artwork and fonts.")
+    print("PASS: 24 pages; KDP media/trim/bleed geometry; Arabic + English text; Mom's Turn; artwork and embedded fonts.")
     print("NOTE: visual proofing and KDP Print Previewer approval are still required.")
+
 
 if __name__ == "__main__":
     main()
