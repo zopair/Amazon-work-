@@ -108,6 +108,8 @@ class SwarmContractTests(unittest.TestCase):
                 opf = archive.read("OEBPS/content.opf").decode("utf-8")
                 self.assertNotIn('properties="svg"', opf)
                 self.assertIn('media-type="image/svg+xml"', opf)
+                epub_css = archive.read("OEBPS/styles/book.css").decode("utf-8")
+                self.assertNotIn("direction:", epub_css)
                 self.assertEqual(sum(name.startswith("OEBPS/text/page-") for name in names), 24)
                 self.assertEqual(sum(name.startswith("OEBPS/images/page-") for name in names), 24)
             self.assertTrue((site_path / "index.html").is_file())
