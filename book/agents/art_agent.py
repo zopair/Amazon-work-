@@ -7,7 +7,6 @@ from __future__ import annotations
 
 import random
 from pathlib import Path
-from xml.sax.saxutils import escape
 
 WIDTH, HEIGHT = 2588, 1716
 VIEW_W, VIEW_H = 1294, 858
@@ -66,8 +65,7 @@ def _train(p: dict) -> str:
     return "".join(parts)
 
 
-def _extra(key: str, outline: str) -> str:
-    x, y = 955, 300
+def _extra(key: str, outline: str, x: int = 955, y: int = 300) -> str:
     if key == "bunny":
         return (f'<g stroke="{outline}" stroke-width="5" stroke-linejoin="round">'
                 f'<ellipse cx="{x+70}" cy="{y+155}" rx="61" ry="52" fill="#E9DCCB"/>'
@@ -101,8 +99,7 @@ def _extra(key: str, outline: str) -> str:
                 f'<path d="M{x+45} {y+155} l-8 20 M{x+80} {y+155} l8 20" fill="none" stroke-width="4"/>'
                 f'<path d="M{x+12} {y+90} L{x-20} {y+70} L{x+8} {y+130} Z" fill="#E9A0B8"/></g>')
         if key == "friends":
-            bunny = _extra("bunny", outline)
-            return bird + bunny
+            return _extra("bird", outline, x=1080, y=245) + _extra("bunny", outline, x=900, y=410)
         return bird
     if key == "rainbow":
         colors = ("#E85D5D", "#F29E4C", "#F6C85F", "#72B788", "#5A9BD5", "#9B83C8")
