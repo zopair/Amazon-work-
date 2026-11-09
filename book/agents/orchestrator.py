@@ -36,10 +36,14 @@ def validate_manifest(manifest: dict, profile: dict) -> None:
         raise ValueError("seed must be a non-negative integer")
 
 
-def run(manifest_path: Path, profile_path: Path, generate_art: bool = False) -> dict:
+def run(manifest_path: Path, profile_path: Path, generate_art: bool = False, seed_override: int | None = None) -> dict:
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
     profiles = json.loads(profile_path.read_text(encoding="utf-8"))
     validate_manifest(manifest, profiles)
+    if seed_override is not None:
+        if seed_override < 0:
+            raise ValueError('seed must be non-negative')
+        manifest['seed'] = seed_override
     story = build_story()
     if story["page_count"] != manifest["page_count"]:
         raise ValueError("Manifest and approved manuscript page counts differ")
@@ -71,6 +75,7 @@ def run(manifest_path: Path, profile_path: Path, generate_art: bool = False) -> 
 
     report = {
         "book_id": manifest["book_id"],
+        "seed": manifest["seed"],
         "status": "PASS" if not generate_art or artwork_status == "generated" else "PLANNED",
         "story_pages": story["page_count"],
         "scene_count": scene_plan["scene_count"],
@@ -88,8 +93,9 @@ def main() -> None:
     parser.add_argument("--manifest", default="config/books/happy-little-train.json")
     parser.add_argument("--profiles", default="config/kdp_profiles.json")
     parser.add_argument("--generate-art", action="store_true")
+    parser.add_argument("--seed", type=int, default=None, help="Override the manifest seed for a reproducible run")
     args = parser.parse_args()
-    report = run(ROOT / args.manifest, ROOT / args.profiles, args.generate_art)
+    report = run(ROOT / args.manifest, ROOT / args.profiles, args.generate_art, args.seed)
     print(json.dumps(report, ensure_ascii=False, indent=2))
 
 
