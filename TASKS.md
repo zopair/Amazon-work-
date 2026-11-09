@@ -14,6 +14,7 @@ Legend: [x] verified / present, [ ] pending, [!] blocker or decision required.
 - [x] Compare GitHub-native/open-source storybook references and reject paid API / heavyweight CI dependencies.
 - [x] Select deterministic, no-secret, low-resource architecture.
 - [ ] Re-check licenses and pin exact versions/SHAs before importing any third-party source.
+- [ ] Resolve strict GitHub-only dependency provenance: current pip default-index and apt-get installs are not GitHub-only; audit and replace/pin the complete transitive dependency chain or document a runner-image exception.
 
 ## Phase 2 — Project plan and structure
 
@@ -77,7 +78,8 @@ Legend: [x] verified / present, [ ] pending, [!] blocker or decision required.
 1. **No production artwork exists yet.** `assets/artwork/` currently contains only its README. The current pipeline correctly stops until 24 qualifying illustrations are supplied.
 2. **Arabic paperback availability.** KDP's official Arabic help currently says paperback publishing in Arabic is unavailable. A bilingual Arabic/English print edition is therefore not guaranteed to be accepted. Resolve language/metadata eligibility before treating the print PDF as publishable.
 3. **No cover builder.** The current workflow produces an interior PDF only; KDP cover is a separate full-wrap file.
-4. **No true local LLM/diffusion in CI.** To preserve free, low-resource GitHub-hosted execution, the first release uses deterministic story templates and original Pillow-generated illustrations. Heavy model inference is explicitly out of scope for hosted runners.
+4. **Dependency source provenance is not yet GitHub-only.** Current workflow uses pip's default package index and Ubuntu apt repositories; a full transitive dependency provenance audit and replacement/pinning plan is required.
+5. **No true local LLM/diffusion in CI.** To preserve free, low-resource GitHub-hosted execution, the first release uses deterministic story templates and original Pillow-generated illustrations. Heavy model inference is explicitly out of scope for hosted runners.
 
 ## Phase 2 exit criteria
 
