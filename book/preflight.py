@@ -12,6 +12,26 @@ ARABIC_RANGES = ((0x0600,0x06FF),(0x0750,0x077F),(0x08A0,0x08FF),(0xFB50,0xFDFF)
 def has_arabic(text: str) -> bool:
     return any(any(a <= ord(ch) <= b for a,b in ARABIC_RANGES) for ch in text)
 
+def page_has_artwork(page) -> bool:
+    resources = page.get("/Resources")
+    if not resources:
+        return False
+    xobjects = resources.get_object().get("/XObject")
+    if not xobjects:
+        return False
+    return any(obj.get_object().get("/Subtype") == "/Image" for obj in xobjects.get_object().values())
+
+def embedded_font(font) -> bool:
+    font = font.get_object()
+    descriptor = font.get("/FontDescriptor")
+    if descriptor:
+        d = descriptor.get_object()
+        return any(d.get(k) for k in ("/FontFile", "/FontFile2", "/FontFile3"))
+    descendants = font.get("/DescendantFonts")
+    if descendants:
+        return any(embedded_font(item) for item in descendants.get_object())
+    return False
+
 def main():
     if not PDF.is_file() or PDF.stat().st_size < 20_000:
         raise SystemExit(f"FAIL: missing or implausibly small PDF: {PDF}")
@@ -33,18 +53,15 @@ def main():
             raise SystemExit(f"FAIL page {i}: Arabic text missing from text layer")
         if not text.strip():
             raise SystemExit(f"FAIL page {i}: empty text layer")
-    # Confirm at least one embedded font is present on every page.
-    for i, page in enumerate(reader.pages, 1):
+        if not page_has_artwork(page):
+            raise SystemExit(f"FAIL page {i}: original artwork image not embedded")
         resources = page.get("/Resources")
         fonts = resources.get_object().get("/Font") if resources else None
         if not fonts or not fonts.get_object():
-            raise SystemExit(f"FAIL page {i}: no embedded font resources")
-        for ref in fonts.get_object().values():
-            font = ref.get_object()
-            descriptor = font.get("/FontDescriptor")
-            if descriptor and not any(descriptor.get_object().get(k) for k in ("/FontFile", "/FontFile2", "/FontFile3")):
-                raise SystemExit(f"FAIL page {i}: font not embedded: {font.get('/BaseFont')}")
-    print("PASS: 24 pages; KDP media/trim/bleed geometry; bilingual text layer; Mom's Turn; embedded fonts.")
+            raise SystemExit(f"FAIL page {i}: no font resources")
+        if not any(embedded_font(ref) for ref in fonts.get_object().values()):
+            raise SystemExit(f"FAIL page {i}: no embedded font program found")
+    print("PASS: 24 pages; KDP media/trim/bleed geometry; Arabic + English text; Mom's Turn; embedded artwork and fonts.")
     print("NOTE: visual proofing and KDP Print Previewer approval are still required.")
 
 if __name__ == "__main__":
