@@ -1,8 +1,6 @@
 name: Generate deterministic book artwork
 
 on:
-  push:
-    branches: [feature/deterministic-swarm-phase-3]
   workflow_dispatch:
 
 permissions:
