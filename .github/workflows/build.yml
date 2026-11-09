@@ -48,7 +48,7 @@ jobs:
         with:
           python-version: '3.12'
       - name: Generate 24 deterministic original SVG illustrations
-        run: python -m book.agents.orchestrator --generate-art --seed "${{ github.event.inputs.seed || '24001' }}"
+        run: python -m book.agents.orchestrator --generate-art --build-epub --build-site --seed "${{ github.event.inputs.seed || '24001' }}"
       - name: Audit 24 original vector/raster page illustrations
         run: python -m book.inputs --report dist/artwork-preflight.json
       - name: Upload generated artwork and diagnostics
@@ -60,6 +60,8 @@ jobs:
             assets/artwork/*.svg
             dist/artwork-preflight.json
             dist/swarm/
+            dist/publish/
+            dist/site/
           if-no-files-found: error
           retention-days: 14
       - name: Upload artwork diagnostics even when the gate fails
