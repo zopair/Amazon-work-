@@ -29,7 +29,7 @@ def page_artwork_diagnostics(page, reader) -> tuple[bool, int, int, list[str]]:
             if any(kind in ("/Image", "/Form") for kind in xobject_types):
                 return True, 0, 0, xobject_types
 
-    contents = page.get_contents()
+    contents = page.get("/Contents")
     if not contents:
         return False, 0, 0, xobject_types
     stream = ContentStream(contents, reader)
