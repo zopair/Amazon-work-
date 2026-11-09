@@ -24,21 +24,21 @@ The print build now pins direct and transitive Python package versions in `requi
 
 ## Source provenance: current status
 
-<badge>PARTIALLY COMPLIANT — NOT GITHUB-ONLY</badge>
+**Status: PARTIALLY COMPLIANT — NOT GITHUB-ONLY**
 
 - The new story, character, SVG illustration, EPUB and static-site agents use Python's standard library only.
 - The quality and artwork-only workflows use GitHub-hosted runners and GitHub Actions; they do not install Python packages.
 - The print workflow currently resolves the pinned Python packages through pip's default package index. The existence of upstream GitHub repositories does **not** mean the workflow fetched those source archives from GitHub.
 - Native libraries, fonts, qpdf and Poppler are installed from Ubuntu package repositories with apt. Those are not GitHub-only sources.
 - The lock pins package versions but does not yet pin artifact hashes or prove GitHub-origin downloads.
-- GitHub Actions are currently referenced by version tags; full commit-SHA pinning remains pending.
+- GitHub Actions are pinned to reviewed full commit SHAs in the current workflow files.
 
 ## Required work before claiming strict GitHub-only sourcing
 
 1. Decide whether the immutable `ubuntu-24.04` runner image is an allowed platform baseline. If not, every native library and font needs a GitHub-origin build/source plan.
 2. Vendor or fetch each Python source distribution from its verified upstream GitHub repository at an immutable commit/tag; verify checksums and licenses.
 3. Audit Pyphen dictionary licensing and retain all required notices.
-4. Pin each third-party Action to a reviewed full commit SHA.
+4. Review and periodically refresh the full commit SHAs used for third-party Actions.
 5. Produce an SBOM and provenance report from the actual build, not just this manually maintained table.
 6. Re-run the full PDF/EPUB/site workflow using only the approved GitHub-origin inputs.
 
