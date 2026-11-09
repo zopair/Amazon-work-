@@ -48,7 +48,7 @@ Sources:
 
 Relevant upstream GitHub projects:
 - WeasyPrint (BSD-3-Clause): https://github.com/Kozea/WeasyPrint
-- Pillow (HPND): https://github.com/python-pillow/Pillow
+- Pillow (MIT-CMU): https://github.com/python-pillow/Pillow
 - pypdf (BSD-3-Clause): https://github.com/py-pdf/pypdf
 - CairoSVG (LGPL-3.0-or-later; optional only): https://github.com/Kozea/CairoSVG
 - Picture Book (MIT; useful as a UX/reference project, not a required runtime dependency): https://github.com/agammann/picture-book
