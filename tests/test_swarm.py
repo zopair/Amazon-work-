@@ -11,6 +11,7 @@ from book.agents.character_agent import build_scene_plan, load_bible
 from book.agents.contracts import validate_page_records
 from book.agents.orchestrator import ROOT, run, validate_manifest
 from book.agents.publisher_agent import build_epub, build_static_site
+from book.agents.localization_agent import audit_locales
 from book.agents.story_agent import build_story
 
 
@@ -31,6 +32,20 @@ class SwarmContractTests(unittest.TestCase):
         plan = build_scene_plan(story, bible)
         self.assertEqual(plan["scene_count"], 24)
         self.assertTrue(all("choo_choo" in scene["cast"] for scene in plan["scenes"]))
+
+    def test_localization_agent_checks_english_arabic_and_rtl(self):
+        story = build_story()
+        report = audit_locales(story, ["en", "ar"])
+        self.assertEqual(report["status"], "PASS")
+        self.assertEqual(report["direction"], {"en": "ltr", "ar": "rtl"})
+        self.assertFalse(report["automatic_translation_performed"])
+        self.assertEqual(report["checked_fields"], 24 * 3 * 2)
+
+    def test_localization_agent_rejects_missing_arabic_script(self):
+        story = build_story()
+        story["pages"][0]["body"]["ar"] = "English-only replacement"
+        with self.assertRaises(ValueError):
+            audit_locales(story, ["en", "ar"])
 
     def test_manifest_and_profile_are_consistent(self):
         manifest = json.loads((ROOT / "config/books/happy-little-train.json").read_text(encoding="utf-8"))
@@ -84,6 +99,7 @@ class SwarmContractTests(unittest.TestCase):
         self.assertEqual(report["story_pages"], 24)
         self.assertEqual(report["artwork_status"], "not_generated")
         self.assertTrue((ROOT / "dist/swarm/scene-plan.json").is_file())
+        self.assertTrue((ROOT / "dist/swarm/localization-report.json").is_file())
 
 
 if __name__ == "__main__":
