@@ -98,7 +98,8 @@ SVG artwork is vector-based and does not require raster DPI upscaling; raster up
 - The PDF is structurally validated only; KDP Print Previewer, complete editorial review, cover and language eligibility remain pending.
 - No secrets, paid APIs, external queues or automated KDP account interactions are required by the new agents.
 - Generated artwork and PDFs should remain CI artifacts, not Git history.
-- All third-party Actions still need reviewed full-SHA pinning before production hardening.
+- Third-party Actions are pinned to immutable full commit SHAs; review and refresh these pins during dependency maintenance.
+- Direct and transitive Python dependencies are pinned in `requirements.txt`; upstream sources and licenses are inventoried in `DEPENDENCIES.md`.
 
 ## 7. Strict GitHub-only dependency provenance
 
