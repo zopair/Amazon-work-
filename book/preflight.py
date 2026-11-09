@@ -38,7 +38,7 @@ def page_has_artwork(page, reader) -> bool:
         b"S", b"s", b"f", b"F", b"f*", b"B", b"B*", b"b", b"b*",
     }
     path_count = sum(1 for _, operator in stream.operations if operator in path_ops)
-    return path_count >= 20
+    return path_count >= 10
 
 
 def embedded_font(font) -> bool:
