@@ -173,7 +173,9 @@ def draw_theme(draw, key, accent, dark, page_index):
                 draw.arc((280+i*28, 170+i*20, 1030-i*28, 760-i*20), 195, 345, fill=color, width=25)
         if key == "song":
             for x, y in ((620, 250), (800, 180), (1020, 300), (530, 380)):
-                draw.text((x, y), "♪", fill=dark, stroke_width=2, stroke_fill="#ffffff")
+                draw.ellipse((x, y + 34, x + 38, y + 62), fill=dark)
+                draw.line((x + 32, y + 45, x + 32, y - 35), fill=dark, width=12)
+                draw.line((x + 32, y - 35, x + 75, y - 18), fill=dark, width=12)
         if key == "end":
             draw.ellipse((930, 60, 1230, 360), fill="#f8d47d")
         return
