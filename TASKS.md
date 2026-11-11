@@ -68,7 +68,7 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 
 - [x] Generate all 24 original vector illustrations.
 - [x] Render the 24-page interior PDF (GitHub Actions artifact; 170,499 bytes).
-- [ ] Generate the full-wrap cover PDF (requires exact KDP calculator inputs).
+- [x] Generate the full-wrap cover PDF in CI; compare final geometry with the selected KDP Cover Calculator template before release.
 - [x] Run content, image, font, geometry and qpdf checks; all structural checks passed.
 - [x] Render all 24 page proofs and inspect the contact sheet plus sampled full-resolution pages.
 - [ ] Confirm the KDP profile against the selected marketplace and current KDP calculator.
@@ -94,9 +94,9 @@ Legend: [x] implemented in repository / [ ] pending / [!] blocker or decision re
 
 ## Phase 3 implementation checkpoint
 
-The feature branch `feature/deterministic-swarm-phase-3` contains the manifest/schema, KDP profile, book configuration, character bible, story/character/SVG/localization agents, EPUB/static-site publisher, orchestrator, regression tests and integrated Actions workflows. The 24-page PDF, EPUB and static site have passed GitHub Actions. A separate KDP paperback cover builder and KDP geometry unit tests have now been added. The latest cover and EPUBCheck workflow changes are awaiting CI results.
+The feature branch `feature/deterministic-swarm-phase-3` contains the manifest/schema, KDP profile, book configuration, character bible, story/character/SVG/localization agents, EPUB/static-site publisher, orchestrator, regression tests and integrated Actions workflows. The 24-page PDF, EPUB and static site have passed GitHub Actions. A separate KDP paperback cover builder and KDP geometry unit tests have now been added. Superseded by feature-branch workflow run 42718252743: EPUBCheck 5.4.0, print PDF/preflight and full-wrap cover build all passed.
 
-Next: inspect the newly generated cover PDF and EPUBCheck output, run page-by-page editorial/art approval, resolve dependency provenance and KDP language eligibility, and compare the cover against the live KDP template. Keep the PR unmerged until these gates are addressed.
+Next: download and inspect the generated PDF/cover/EPUB artifacts, complete page-by-page editorial/art approval, resolve dependency provenance and KDP language eligibility, and compare the cover against the live KDP template. Keep the PR unmerged until these gates are addressed.
 
 
 ## Phase 4 implementation checkpoint
@@ -106,3 +106,18 @@ The branch `feature/multi-book-pipeline-phase-4` adds `books-queue/`, `book.disc
 **Multi-book content limitation:** discovery and matrix orchestration are queue-driven, but the current manuscript adapter and PDF renderer still consume the existing approved 24-page `book.content.PAGES` source and fixed renderer output. A second queue entry does not yet represent an independently authored manuscript. Do not enqueue different story content until the content adapter, renderer and content audit are parameterized per manifest. This is a known Phase 4 follow-up, not a claim of fully generalized book authoring.
 
 **Network resilience limitation:** `book/agents/retry.py` provides bounded exponential backoff for idempotent transient network operations. The current swarm has no model/API transport client, so there is no outbound model request to patch; the helper is ready for any future approved connector.
+
+
+## Verified feature-branch execution — 2026-11-09
+
+Workflow run [42718252743](https://github.com/zopair/Amazon-work-/actions/runs/42718252743) on commit `2931aa1b903cef0dcf6dd1c7ffef6909f060eb16` completed successfully. Verified jobs:
+- 24-page bilingual content integrity audit.
+- Deterministic generation and audit of all 24 original SVG illustrations.
+- EPUB 3.4 validation using W3C EPUBCheck 5.4.0.
+- Print PDF rendering and structural/bilingual preflight.
+- Paperback full-wrap cover PDF generation.
+- Visual proof rendering and artifact packaging.
+
+Three artifacts were retained by GitHub Actions: generated artwork (127,214 bytes), print-ready package (1,491,999 bytes), and artwork preflight diagnostics (527 bytes). They expire on 2026-11-23 or 2026-12-09 as reported by GitHub.
+
+**Evidence boundary:** successful CI validates the pipeline and structural checks, not artistic approval, KDP account/language eligibility, or acceptance in KDP Print Previewer. The release job was skipped. The feature branch is not the default branch.
