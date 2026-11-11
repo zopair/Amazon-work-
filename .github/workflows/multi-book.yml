@@ -1,0 +1,194 @@
+name: Multi-book production pipeline
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: multi-book-production-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  discover:
+    name: Discover enabled books
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    outputs:
+      matrix: ${{ steps.discovery.outputs.matrix }}
+      book_count: ${{ steps.discovery.outputs.book_count }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+      - id: discovery
+        name: Build matrix from books-queue
+        run: python -m book.discover_books --queue books-queue --github-output "$GITHUB_OUTPUT"
+
+  build-book:
+    name: Build ${{ matrix.book_id }}
+    needs: discover
+    if: needs.discover.outputs.book_count != '0'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    strategy:
+      fail-fast: true
+      max-parallel: 1
+      matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - uses: actions/setup-python@a26af69be951a213d495a4c3e4e4022e16d87065 # v5
+        with:
+          python-version: '3.12'
+          cache: pip
+      - name: Install rendering and image validation tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends \
+            libpango-1.0-0 libpangocairo-1.0-0 libcairo2 libgdk-pixbuf-2.0-0 \
+            shared-mime-info fontconfig fonts-noto-core fonts-dejavu-core \
+            qpdf poppler-utils imagemagick
+      - name: Install pinned Python dependencies
+        run: pip install -r requirements.txt
+      - name: Generate book assets, EPUB and static site
+        run: |
+          python -m book.agents.orchestrator \
+            --manifest "${{ matrix.manifest }}" \
+            --generate-art --build-epub --build-site --seed "${{ matrix.seed }}"
+          mv "dist/publish/the-happy-little-train.epub" "dist/publish/${{ matrix.book_id }}.epub"
+          mkdir -p "dist/sites/${{ matrix.book_id }}"
+          cp -a dist/site/. "dist/sites/${{ matrix.book_id }}/"
+      - name: Render and preflight print interior
+        run: |
+          python -m book.render
+          python -m book.preflight dist/the-happy-little-train-print.pdf
+          qpdf --check dist/the-happy-little-train-print.pdf
+          mv dist/the-happy-little-train-print.pdf "dist/${{ matrix.book_id }}-print.pdf"
+      - name: Build full-wrap cover and verify pixel geometry
+        run: |
+          python -m book.cover \
+            --manifest "${{ matrix.manifest }}" \
+            --profiles config/kdp_profiles.json \
+            --artwork "${{ matrix.artwork_dir }}" \
+            --output "dist/${{ matrix.book_id }}-cover.pdf" \
+            --pages "${{ matrix.page_count }}"
+          pdftoppm -f 1 -singlefile -r 300 -png \
+            "dist/${{ matrix.book_id }}-cover.pdf" "/tmp/${{ matrix.book_id }}-cover"
+          identify -version
+          python -m book.validate_cover_geometry \
+            "/tmp/${{ matrix.book_id }}-cover.png" \
+            --manifest "${{ matrix.manifest }}" \
+            --profiles config/kdp_profiles.json \
+            --report "dist/${{ matrix.book_id }}-cover-image-geometry.json"
+      - name: Upload immutable per-book build bundle
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: book-bundle-${{ matrix.book_id }}
+          path: |
+            dist/${{ matrix.book_id }}-print.pdf
+            dist/${{ matrix.book_id }}-cover.pdf
+            dist/${{ matrix.book_id }}-cover-image-geometry.json
+            dist/publish/${{ matrix.book_id }}.epub
+            dist/sites/${{ matrix.book_id }}/
+            dist/swarm/
+          if-no-files-found: error
+          retention-days: 14
+
+  epubcheck:
+    name: EPUBCheck gate — ${{ matrix.book_id }}
+    needs: [discover, build-book]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    strategy:
+      fail-fast: true
+      max-parallel: 1
+      matrix: ${{ fromJSON(needs.discover.outputs.matrix) }}
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Download this book's build bundle
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          name: book-bundle-${{ matrix.book_id }}
+          path: dist
+      - name: Verify Java runtime
+        run: java -version
+      - name: Download and checksum official W3C EPUBCheck 5.4.0
+        run: |
+          curl --fail --location --retry 2 \
+            https://github.com/w3c/epubcheck/releases/download/v5.4.0/epubcheck-5.4.0.zip \
+            --output /tmp/epubcheck.zip
+          echo "33350c61038e71dfb3d45a76aed04bf5481e6d5500cb780f6e98db8bbd15a28c  /tmp/epubcheck.zip" | sha256sum --check
+          mkdir -p /tmp/epubcheck
+          unzip -q /tmp/epubcheck.zip -d /tmp/epubcheck
+      - name: Block on EPUBCheck ERROR or FATAL
+        shell: bash
+        run: |
+          set -o pipefail
+          JAR="$(find /tmp/epubcheck -name epubcheck.jar -type f -print -quit)"
+          test -n "$JAR"
+          java -jar "$JAR" "dist/publish/${{ matrix.book_id }}.epub" 2>&1 | tee /tmp/epubcheck.log
+          if grep -E '(^|[[:space:]])(ERROR|FATAL)([[:space:]:]|$)' /tmp/epubcheck.log; then
+            echo "EPUBCheck reported a blocking ERROR/FATAL."
+            exit 1
+          fi
+
+  publish-gh-pages:
+    name: Publish validated books to gh-pages
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [discover, build-book, epubcheck]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+      - name: Download all validated static sites
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
+        with:
+          pattern: book-bundle-*
+          merge-multiple: true
+          path: public
+      - name: Verify all queued sites exist
+        run: |
+          test -d public/sites
+          find public/sites -mindepth 1 -maxdepth 1 -type d -print
+      - name: Update gh-pages only after every EPUB gate passes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          AUTH="$(printf 'x-access-token:%s' "$GH_TOKEN" | base64 -w0)"
+          if git -c "http.extraheader=AUTHORIZATION: basic $AUTH" clone --depth 1 --branch gh-pages "https://github.com/$GITHUB_REPOSITORY.git" /tmp/gh-pages; then
+            :
+          else
+            rm -rf /tmp/gh-pages
+            git -c "http.extraheader=AUTHORIZATION: basic $AUTH" clone --depth 1 "https://github.com/$GITHUB_REPOSITORY.git" /tmp/gh-pages
+            git -C /tmp/gh-pages checkout --orphan gh-pages
+            git -C /tmp/gh-pages rm -rf . >/dev/null 2>&1 || true
+          fi
+          mkdir -p /tmp/gh-pages/books
+          rsync -a public/sites/ /tmp/gh-pages/books/
+          cat > /tmp/gh-pages/index.html <<'HTML'
+          <!doctype html><html lang="en"><meta charset="utf-8"><title>Books</title>
+          <h1>Published books</h1><ul>
+          HTML
+          for dir in /tmp/gh-pages/books/*/; do
+            [ -d "$dir" ] || continue
+            slug="$(basename "$dir")"
+            printf '<li><a href="books/%s/">%s</a></li>\n' "$slug" "$slug" >> /tmp/gh-pages/index.html
+          done
+          echo '</ul></html>' >> /tmp/gh-pages/index.html
+          git -C /tmp/gh-pages config user.name "github-actions[bot]"
+          git -C /tmp/gh-pages config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git -C /tmp/gh-pages add books index.html
+          if git -C /tmp/gh-pages diff --cached --quiet; then
+            echo "No gh-pages changes to publish."
+          else
+            git -C /tmp/gh-pages commit -m "Publish validated multi-book site"
+            git -c "http.extraheader=AUTHORIZATION: basic $AUTH" -C /tmp/gh-pages push origin gh-pages
+          fi
