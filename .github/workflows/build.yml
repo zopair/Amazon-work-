@@ -37,8 +37,19 @@ jobs:
           python-version: '3.12'
       - name: Install image inspection dependency
         run: python -m pip install --disable-pip-version-check Pillow==11.0.0
+      - name: Generate original 24-page artwork locally
+        run: python -m book.generate_artwork --output assets/artwork
+      - name: Test artwork generator
+        run: python -m unittest discover -s book/tests -v
       - name: Audit 24 original page illustrations
         run: python -m book.inputs --report dist/artwork-preflight.json
+      - name: Upload generated artwork for the PDF job
+        uses: actions/upload-artifact@v4
+        with:
+          name: happy-little-train-original-artwork
+          path: assets/artwork/
+          if-no-files-found: error
+          retention-days: 7
       - name: Upload artwork diagnostics even when the gate fails
         if: always()
         uses: actions/upload-artifact@v4
@@ -56,6 +67,12 @@ jobs:
     steps:
       - name: Checkout source
         uses: actions/checkout@v4
+
+      - name: Download the verified original artwork
+        uses: actions/download-artifact@v4
+        with:
+          name: happy-little-train-original-artwork
+          path: assets/artwork
 
       - name: Set up Python
         uses: actions/setup-python@v5
