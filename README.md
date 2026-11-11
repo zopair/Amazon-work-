@@ -35,8 +35,9 @@ Generated files are written to `assets/artwork/page-01.svg` … `page-24.svg`. B
 2. `assets/artwork/`: 24 original illustrations, required by the artwork gate.
 3. `book/render.py`: HTML/CSS pagination via WeasyPrint + Pango/HarfBuzz.
 4. `book/preflight.py`: PDF page count, MediaBox/TrimBox/BleedBox, bilingual text and embedded fonts.
-5. `book/cover.py`: calculate paperback full-wrap geometry and render the cover PDF from the selected book/KDP profile.\n6. `.github/workflows/build.yml`: generate SVG artwork, render the print PDF and full-wrap cover, run structural checks and upload artifacts.
-6. `.github/workflows/swarm-artwork.yml`: lightweight artwork-only generation and 14-day artifact workflow.
+5. `book/cover.py`: calculate paperback full-wrap geometry and render the cover PDF from the selected book/KDP profile.
+6. `.github/workflows/build.yml`: generate SVG artwork, render the print PDF and full-wrap cover, run structural checks and upload artifacts.
+7. `.github/workflows/swarm-artwork.yml`: lightweight artwork-only generation and 14-day artifact workflow.
 
 Run the print pipeline locally after installing the system libraries/fonts listed in the existing workflow:
 
