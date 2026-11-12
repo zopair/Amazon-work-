@@ -45,7 +45,7 @@ class MarketScoringTests(unittest.TestCase):
             rows.append(record(f"A{i}", "Niche A", 1000 + i * 100, 40, AS_OF - timedelta(days=30)))
             rows.append(record(f"B{i}", "Niche B", 50000 + i * 1000, 600, AS_OF - timedelta(days=600)))
             rows.append(record(f"C{i}", "Niche C", 100 + i * 10, 10, AS_OF - timedelta(days=20), category="Books > Education"))
-        scored = {item["niche"]: item for item in score_market(rows, as_of=AS_OF)}
+        scored = {item["niche"]: item for item in score_market(rows, as_of=AS_OF, minimum_sample=5)}
         self.assertGreater(scored["Niche A"]["demand_score"], scored["Niche B"]["demand_score"])
         self.assertIsNone(scored["Niche C"]["demand_score"])
         self.assertEqual(scored["Niche C"]["status"], "insufficient_comparators")
@@ -55,12 +55,12 @@ class MarketScoringTests(unittest.TestCase):
         for i in range(5):
             rows.append(record(f"LOW{i}", "Accessible niche", 1000 + i, 20, AS_OF - timedelta(days=30)))
             rows.append(record(f"HIGH{i}", "Mature niche", 2000 + i, 2000, AS_OF - timedelta(days=900)))
-        scored = {item["niche"]: item for item in score_market(rows, as_of=AS_OF)}
+        scored = {item["niche"]: item for item in score_market(rows, as_of=AS_OF, minimum_sample=5)}
         self.assertGreater(scored["Accessible niche"]["entry_score"], scored["Mature niche"]["entry_score"])
 
     def test_small_samples_are_not_given_an_opportunity_score(self):
         rows = [record(f"ONE{i}", "Small sample", 1000 + i, 20, AS_OF) for i in range(4)]
-        result = score_market(rows, as_of=AS_OF)[0]
+        result = score_market(rows, as_of=AS_OF, minimum_sample=5)[0]
         self.assertEqual(result["status"], "insufficient_sample")
         self.assertIsNone(result["opportunity_score"])
 
@@ -71,7 +71,7 @@ class MarketScoringTests(unittest.TestCase):
             item = record(f"P{i}", "Same niche", 2000 + i, 20, AS_OF)
             item["format"] = "Paperback"
             rows.append(item)
-        results = score_market(rows, as_of=AS_OF)
+        results = score_market(rows, as_of=AS_OF, minimum_sample=5)
         self.assertEqual(len(results), 2)
         self.assertTrue(all(item["status"] == "insufficient_comparators" for item in results))
 
@@ -86,7 +86,7 @@ class MarketScoringTests(unittest.TestCase):
         for i in range(5):
             rows.append(record(f"A{i}", "Niche A", 1000 + i, 20, AS_OF))
             rows.append(record(f"B{i}", "Niche B", 50000 + i, 600, AS_OF - timedelta(days=800)))
-        results = score_market(rows, as_of=AS_OF)
+        results = score_market(rows, as_of=AS_OF, minimum_sample=5)
         for result in results:
             self.assertGreaterEqual(result["opportunity_score"], 0)
             self.assertLessEqual(result["opportunity_score"], 100)
