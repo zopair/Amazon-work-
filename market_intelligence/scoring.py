@@ -90,7 +90,7 @@ def validate_record(record: dict[str, Any]) -> dict[str, Any]:
         raise ValueError("evidence_url must be an absolute HTTPS URL")
 
     for field in ("marketplace", "niche", "category_path", "asin", "title",
-                  "currency", "format"):
+                  "currency", "format", "language"):
         if not str(normalized.get(field, "")).strip():
             raise ValueError(f"{field} cannot be empty")
     return normalized
@@ -105,7 +105,7 @@ def _distribution(records: list[dict[str, Any]], field: str) -> dict[str, int]:
 def _evidence_score(records: list[dict[str, Any]]) -> float:
     per_record = []
     for row in records:
-        present = sum(bool(str(row.get(field, "")).strip())
+        present = sum(row.get(field) is not None and bool(str(row.get(field, "")).strip())
                       for field in EVIDENCE_FIELDS)
         per_record.append(100.0 * present / len(EVIDENCE_FIELDS))
     return round(sum(per_record) / len(per_record), 2)
@@ -154,16 +154,22 @@ def score_market(records: Iterable[dict[str, Any]], *,
     if not normalized:
         raise ValueError("No competitor records were supplied")
 
-    grouped: dict[tuple[str, str, str], list[dict[str, Any]]] = defaultdict(list)
+    grouped: dict[tuple[str, str, str, str, str], list[dict[str, Any]]] = defaultdict(list)
     for row in normalized:
-        grouped[(row["marketplace"], row["category_path"], row["niche"])].append(row)
+        grouped[(row["marketplace"], row["category_path"], row["niche"], row["format"], row["language"])].append(row)
 
     groups = []
-    for (marketplace, category_path, niche), items in grouped.items():
+    for (marketplace, category_path, niche, book_format, language), items in grouped.items():
+        currencies = {item["currency"] for item in items}
+        if len(currencies) != 1:
+            raise ValueError(f"Mixed currencies in {marketplace}/{category_path}/{niche}")
         groups.append({
             "marketplace": marketplace,
             "category_path": category_path,
             "niche": niche,
+            "format": book_format,
+            "language": language,
+            "currency": items[0]["currency"],
             "records": items,
             "minimum_sample": minimum_sample,
             "median_bsr": median(item["bsr"] for item in items),
@@ -194,6 +200,8 @@ def score_market(records: Iterable[dict[str, Any]], *,
             1 for candidate in groups
             if candidate["marketplace"] == group["marketplace"]
             and candidate["category_path"] == group["category_path"]
+            and candidate["format"] == group["format"]
+            and candidate["language"] == group["language"]
             and len(candidate["records"]) >= minimum_sample
         )
 
@@ -220,6 +228,8 @@ def score_market(records: Iterable[dict[str, Any]], *,
             "marketplace": group["marketplace"],
             "category_path": group["category_path"],
             "niche": group["niche"],
+            "format": group["format"],
+            "language": group["language"],
             "status": status,
             "sample_size": sample_size,
             "category_comparator_count": peer_count,
