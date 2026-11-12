@@ -9,7 +9,7 @@ Before producing a book, collect comparable competitor observations and identify
 ## Data collection protocol
 
 1. Select one Amazon marketplace, one Kindle format, one language, one category path, and one narrowly defined niche per sample.
-2. Capture at least 50 relevant books per niche for a decision-grade study. Five is the minimum supported by the screening tool; it is not enough to claim market demand.
+2. Capture at least 50 relevant books per niche for a decision-grade study. Ten is the default minimum for a preliminary score. Five can be used only for an explicitly provisional screen; it is not enough to claim market demand.
 3. Record each listing's ASIN, exact title/subtitle, price/currency, BSR as observed, review count, rating, publication date, format, page count when available, language, and product URL.
 4. Inspect cover palette, cover style, title pattern, typography, interior style, and content type. Record factual observations, not subjective assumptions.
 5. Read a structured sample of recent positive and critical reviews. Record recurring unmet needs in your own words; do not copy review text. Set gap_score_0_5 and differentiation_score_0_5 only after writing supporting notes.
@@ -30,7 +30,7 @@ Before producing a book, collect comparable competitor observations and identify
 
 ## Scoring model
 
-Only niches with at least five observed books and at least two comparable niches in the same marketplace/category/format/language receive a composite score.
+Only niches with at least ten observed books and at least two comparable niches in the same marketplace/category/format/language receive a composite score.
 
 | Component | Weight | Definition |
 |---|---:|---|
@@ -44,7 +44,7 @@ No score converts BSR or review counts into sales. A single-category sample cann
 
 ## Run locally
 
-Python 3.12+; standard library only.
+Python 3.12+; standard library only. The default minimum sample is ten books per niche; use --min-sample 5 only for a provisional screen.
 
     python -m unittest discover -s tests -v
     python -m market_intelligence.cli score data/templates/kdp_competitors.csv --as-of 2026-11-12 --output reports/kdp-market-score.json
