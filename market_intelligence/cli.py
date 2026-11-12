@@ -45,7 +45,7 @@ def main() -> int:
             "This report ranks observed signals; it does not estimate sales from BSR.",
             "Competitor observations are snapshots and may change.",
             "Gap and differentiation scores require a documented human review.",
-            "Compare BSR only within the same marketplace and category path.",
+            "Compare category-list position only within the same marketplace, category, format, and language; keep product BSR separate.",
         ],
     }
     args.output.write_text(
