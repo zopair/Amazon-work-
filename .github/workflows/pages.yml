@@ -2,7 +2,7 @@ name: Deploy bilingual book project preview
 
 on:
   push:
-    branches: [main]
+    branches: [main, feat/book-project-preview-pages]
     paths:
       - "site/**"
       - ".github/workflows/pages.yml"
