@@ -101,6 +101,10 @@ def validate_record(record: dict[str, Any]) -> dict[str, Any]:
                   "currency", "format", "language"):
         if not str(normalized.get(field, "")).strip():
             raise ValueError(f"{field} cannot be empty")
+    if normalized["gap_score_0_5"] > 0 and not str(normalized.get("review_gap_notes", "")).strip():
+        raise ValueError("review_gap_notes are required when gap_score_0_5 is above zero")
+    if normalized["differentiation_score_0_5"] > 0 and not str(normalized.get("content_value_notes", "")).strip():
+        raise ValueError("content_value_notes are required when differentiation_score_0_5 is above zero")
     return normalized
 
 
@@ -175,6 +179,11 @@ def score_market(records: Iterable[dict[str, Any]], *,
     normalized = [validate_record(row) for row in records]
     if not normalized:
         raise ValueError("No competitor records were supplied")
+    future_observations = [
+        row["asin"] for row in normalized if row["observed_at_parsed"] > as_of
+    ]
+    if future_observations:
+        raise ValueError("observed_at cannot be later than the report as_of date")
 
     grouped: dict[tuple[str, str, str, str, str], list[dict[str, Any]]] = defaultdict(list)
     for row in normalized:
@@ -216,7 +225,16 @@ def score_market(records: Iterable[dict[str, Any]], *,
         differentiation_score = round(
             20 * sum(item["differentiation_score_0_5"] for item in items) / sample_size, 2
         )
-        evidence_score = _evidence_score(items)
+        completeness_score = _evidence_score(items)
+        freshness_score = round(
+            100.0 * sum(0 <= (as_of - item["observed_at_parsed"]).days <= 30 for item in items)
+            / sample_size,
+            2,
+        )
+        evidence_score = round((completeness_score + freshness_score) / 2, 2)
+        median_observation_age = median(
+            (as_of - item["observed_at_parsed"]).days for item in items
+        )
         demand_score = demand.get(key)
         peer_count = sum(
             1 for candidate in groups
@@ -263,6 +281,9 @@ def score_market(records: Iterable[dict[str, Any]], *,
             "entry_score": entry_score,
             "content_gap_score": gap_score,
             "differentiation_score": differentiation_score,
+            "evidence_completeness_score": completeness_score,
+            "freshness_score": freshness_score,
+            "median_observation_age_days": median_observation_age,
             "evidence_quality_score": evidence_score,
             "opportunity_score": opportunity_score,
             "median_price": round(median(item["price"] for item in items), 2),
