@@ -43,3 +43,11 @@ See [market intelligence methodology](market_intelligence/README.md) and the [co
 Run the research tests with `python -m unittest discover -s tests -v`. Run a screening report with `python -m market_intelligence.cli score data/observations/kdp_competitors.csv --as-of YYYY-MM-DD` after creating a sourced observation file from the template.
 
 The research layer is independent of the existing 24-page children's book production pipeline. Do not change the approved manuscript or artwork gates as part of market research.
+
+The Amazon.com Kindle royalty estimator uses the current US 70% price band and buyer-country eligibility rules:
+
+```bash
+python -m market_intelligence.cli royalty 9.99 --file-size-mb 1.5 --buyer-country EG --royalty-option 70
+```
+
+See the market intelligence guide for methodology, KDP policy sources, and limitations. The KDP Bookshelf royalty preview remains authoritative.
