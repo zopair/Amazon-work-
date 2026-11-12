@@ -20,7 +20,8 @@ def record(asin, niche, bsr, reviews, published, category="Books > Business", ma
         "review_count": str(reviews),
         "rating": "4.5",
         "publication_date": published.isoformat(),
-        "format": "Kindle eBook",\n        "language": "English",
+        "format": "Kindle eBook",
+        "language": "English",
         "page_count": "180",
         "evidence_url": f"https://www.amazon.com/dp/{asin}",
         "observed_at": AS_OF.isoformat(),
@@ -63,7 +64,18 @@ class MarketScoringTests(unittest.TestCase):
         self.assertEqual(result["status"], "insufficient_sample")
         self.assertIsNone(result["opportunity_score"])
 
-    def test_different_formats_are_not_used_as_comparators(self):\n        rows = []\n        for i in range(5):\n            rows.append(record(f"E{i}", "Same niche", 1000 + i, 20, AS_OF))\n            item = record(f"P{i}", "Same niche", 2000 + i, 20, AS_OF)\n            item["format"] = "Paperback"\n            rows.append(item)\n        results = score_market(rows, as_of=AS_OF)\n        self.assertEqual(len(results), 2)\n        self.assertTrue(all(item["status"] == "insufficient_comparators" for item in results))\n\n    def test_invalid_evidence_url_is_rejected(self):
+    def test_different_formats_are_not_used_as_comparators(self):
+        rows = []
+        for i in range(5):
+            rows.append(record(f"E{i}", "Same niche", 1000 + i, 20, AS_OF))
+            item = record(f"P{i}", "Same niche", 2000 + i, 20, AS_OF)
+            item["format"] = "Paperback"
+            rows.append(item)
+        results = score_market(rows, as_of=AS_OF)
+        self.assertEqual(len(results), 2)
+        self.assertTrue(all(item["status"] == "insufficient_comparators" for item in results))
+
+    def test_invalid_evidence_url_is_rejected(self):
         item = record("BAD1", "Invalid", 1000, 10, AS_OF)
         item["evidence_url"] = "javascript:alert(1)"
         with self.assertRaises(ValueError):
