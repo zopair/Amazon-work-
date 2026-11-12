@@ -285,6 +285,23 @@ def score_market(records: Iterable[dict[str, Any]], *,
                 item["review_gap_notes"] for item in items
                 if str(item.get("review_gap_notes", "")).strip()
             ],
+            "competitor_observations": [
+                {
+                    field: item.get(field)
+                    for field in (
+                        "asin", "title", "subtitle", "price", "currency", "bsr",
+                        "review_count", "rating", "publication_date", "format",
+                        "language", "page_count", "audience", "cover_palette",
+                        "cover_style", "cover_width_px", "cover_height_px",
+                        "title_pattern", "font_style", "body_font_size_pt",
+                        "heading_font_size_pt", "interior_style", "content_type",
+                        "description_structure", "keyword_topics",
+                        "content_value_notes", "review_gap_notes",
+                        "evidence_url", "observed_at",
+                    )
+                }
+                for item in sorted(items, key=lambda row: row["bsr"])
+            ],
             "evidence_urls": sorted({item["evidence_url"] for item in items}),
             "scoring_weights": WEIGHTS.copy(),
             "interpretation": (
