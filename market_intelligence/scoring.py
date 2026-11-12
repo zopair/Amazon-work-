@@ -158,7 +158,7 @@ def _percentile_scores(groups: list[dict[str, Any]]) -> dict[tuple[str, str, str
         index = 0
         while index < count:
             end = index
-            while end + 1 < count and ordered[end + 1]["median_bsr"] == ordered[index]["median_bsr"]:
+            while end + 1 < count and ordered[end + 1]["median_category_list_rank"] == ordered[index]["median_category_list_rank"]:
                 end += 1
             average_rank = (index + end) / 2
             score = 100.0 * (count - 1 - average_rank) / (count - 1)
