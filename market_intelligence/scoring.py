@@ -13,12 +13,12 @@ from typing import Any, Iterable
 
 REQUIRED_FIELDS = (
     "marketplace", "niche", "category_path", "asin", "title", "price",
-    "currency", "bsr", "review_count", "publication_date", "format",
+    "currency", "category_list_rank", "review_count", "publication_date", "format",
     "evidence_url", "observed_at", "language", "gap_score_0_5",
     "differentiation_score_0_5",
 )
 EVIDENCE_FIELDS = (
-    "price", "currency", "bsr", "review_count", "rating", "publication_date",
+    "price", "currency", "category_list_rank", "bsr", "review_count", "rating", "publication_date",
     "page_count", "format", "language", "evidence_url", "observed_at", "asin", "title",
     "subtitle", "audience", "cover_palette", "cover_style", "cover_width_px",
     "cover_height_px", "title_pattern", "font_style", "body_font_size_pt",
@@ -58,7 +58,12 @@ def validate_record(record: dict[str, Any]) -> dict[str, Any]:
     normalized["marketplace"] = str(normalized["marketplace"]).upper()
     normalized["asin"] = str(normalized["asin"]).upper()
     normalized["price"] = _number(normalized["price"], "price", minimum=0.01)
-    normalized["bsr"] = _number(normalized["bsr"], "bsr", minimum=1, integer=True)
+    normalized["category_list_rank"] = _number(
+        normalized["category_list_rank"], "category_list_rank", minimum=1, maximum=100, integer=True
+    )
+    bsr_value = normalized.get("bsr")
+    bsr_value = "" if bsr_value is None else str(bsr_value).strip()
+    normalized["bsr"] = _number(bsr_value, "bsr", minimum=1, integer=True) if bsr_value else None
     normalized["review_count"] = _number(
         normalized["review_count"], "review_count", minimum=0, integer=True
     )
@@ -148,7 +153,7 @@ def _percentile_scores(groups: list[dict[str, Any]]) -> dict[tuple[str, str, str
     for peers in by_category.values():
         if len(peers) < 2:
             continue
-        ordered = sorted(peers, key=lambda item: item["median_bsr"])
+        ordered = sorted(peers, key=lambda item: item["median_category_list_rank"])
         count = len(ordered)
         index = 0
         while index < count:
@@ -203,7 +208,9 @@ def score_market(records: Iterable[dict[str, Any]], *,
             "currency": items[0]["currency"],
             "records": items,
             "minimum_sample": minimum_sample,
-            "median_bsr": median(item["bsr"] for item in items),
+            "median_category_list_rank": median(item["category_list_rank"] for item in items),
+            "median_bsr": median([item["bsr"] for item in items if item["bsr"] is not None])
+            if any(item["bsr"] is not None for item in items) else None,
         })
 
     demand = _percentile_scores(groups)
@@ -273,6 +280,7 @@ def score_market(records: Iterable[dict[str, Any]], *,
             "status": status,
             "sample_size": sample_size,
             "category_comparator_count": peer_count,
+            "median_category_list_rank": group["median_category_list_rank"],
             "median_bsr": group["median_bsr"],
             "median_review_count": median_reviews,
             "share_with_100_or_fewer_reviews_pct": round(low_review_share, 2),
@@ -310,8 +318,8 @@ def score_market(records: Iterable[dict[str, Any]], *,
                 {
                     field: item.get(field)
                     for field in (
-                        "asin", "title", "subtitle", "price", "currency", "bsr",
-                        "review_count", "rating", "publication_date", "format",
+                        "asin", "title", "subtitle", "price", "currency",
+                        "category_list_rank", "bsr", "review_count", "rating", "publication_date", "format",
                         "language", "page_count", "audience", "cover_palette",
                         "cover_style", "cover_width_px", "cover_height_px",
                         "title_pattern", "font_style", "body_font_size_pt",
@@ -326,8 +334,8 @@ def score_market(records: Iterable[dict[str, Any]], *,
             "evidence_urls": sorted({item["evidence_url"] for item in items}),
             "scoring_weights": WEIGHTS.copy(),
             "interpretation": (
-                "Comparative opportunity signal only. BSR is a relative rank, "
-                "not a unit-sales or revenue estimate."
+                "Comparative opportunity signal only. Category list rank and BSR are "
+                "relative rankings, not unit-sales or revenue estimates."
             ),
         })
 
