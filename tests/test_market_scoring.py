@@ -16,6 +16,7 @@ def record(asin, niche, bsr, reviews, published, category="Books > Business", ma
         "title": f"Evidence-backed title {asin}",
         "price": "4.99",
         "currency": "USD",
+        "category_list_rank": str(max(1, min(100, int(bsr) // 1000))),
         "bsr": str(bsr),
         "review_count": str(reviews),
         "rating": "4.5",
