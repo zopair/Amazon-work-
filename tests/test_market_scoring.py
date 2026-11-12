@@ -75,6 +75,24 @@ class MarketScoringTests(unittest.TestCase):
         self.assertEqual(len(results), 2)
         self.assertTrue(all(item["status"] == "insufficient_comparators" for item in results))
 
+    def test_gap_scores_require_supporting_evidence_notes(self):
+        item = record("GAP1", "Documented gap", 1000, 10, AS_OF)
+        item["review_gap_notes"] = ""
+        with self.assertRaises(ValueError):
+            validate_record(item)
+
+    def test_stale_observations_reduce_evidence_quality(self):
+        rows = []
+        for i in range(5):
+            rows.append(record(f"F{i}", "Fresh niche", 1000 + i, 20, AS_OF - timedelta(days=10)))
+            stale = record(f"S{i}", "Stale niche", 2000 + i, 20, AS_OF - timedelta(days=60))
+            stale["observed_at"] = (AS_OF - timedelta(days=60)).isoformat()
+            rows.append(stale)
+        results = {item["niche"]: item for item in score_market(rows, as_of=AS_OF, minimum_sample=5)}
+        self.assertEqual(results["Fresh niche"]["freshness_score"], 100.0)
+        self.assertEqual(results["Stale niche"]["freshness_score"], 0.0)
+        self.assertLess(results["Stale niche"]["evidence_quality_score"], results["Fresh niche"]["evidence_quality_score"])
+
     def test_invalid_evidence_url_is_rejected(self):
         item = record("BAD1", "Invalid", 1000, 10, AS_OF)
         item["evidence_url"] = "javascript:alert(1)"
