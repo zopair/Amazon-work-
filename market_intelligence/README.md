@@ -14,7 +14,7 @@ Before producing a book, collect comparable competitor observations and identify
 4. Inspect cover palette, cover style, cover image dimensions when observable, title/subtitle pattern, typography, interior style, audience, description structure, keyword themes, and content type. Record factual observations, not subjective assumptions. For reflowable Kindle eBooks, reader-controlled font size is not a stable product attribute; record font sizes only when a fixed-layout or print preview makes them measurable.
 5. Read a structured sample of recent positive and critical reviews. Record recurring unmet needs in your own words; do not copy review text. Set gap_score_0_5 and differentiation_score_0_5 only after writing supporting notes.
 6. Record observed_at as the date the listing was inspected. Keep a new snapshot rather than silently overwriting historical observations.
-7. Use only permitted public access and official interfaces. Do not scrape pages, evade rate limits, automate account actions, or republish Amazon reviews or copyrighted descriptions.
+7. Use permitted public access, official Amazon interfaces, or clearly attributed third-party market snapshots. Do not run scraping against Amazon, evade rate limits, automate account actions, or republish Amazon reviews or copyrighted descriptions.
 
 ## Data dictionary
 
