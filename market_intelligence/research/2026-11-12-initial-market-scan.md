@@ -171,3 +171,14 @@ Sources: [KDPTop Applications & Software top 10](https://kdptop.com/kdp/categori
 4. **Generative AI:** low median reviews ($10) and $7.99 median price, but high daily list turnover. This may be a fast-moving market with higher update costs and greater risk of outdated content.
 
 The low review counts in Educational Software and E-mail are not sufficient evidence of opportunity by themselves: low turnover or a small audience can produce the same pattern. Do not select a niche from review count alone.
+
+
+### Cover-system observations from technical best sellers
+
+Two O'Reilly technical titles in the Applications & Software list share a publisher-specific design system:
+- **AI Engineering: Building Applications with Foundation Models** — 532 pages; white cover, large black sans-serif title, muted brown subtitle, and a single naturalist-style owl illustration. The Amazon list snapshot showed $43.70 and 1,029 reviews.
+- **Evals for AI Engineers: Systematically Measuring and Improving AI Applications** — white cover, large black sans-serif title, restrained orange subtitle, and a naturalist illustration of two animals. The Amazon list snapshot showed $67.99 and one review.
+
+Sources: [Google Books bibliographic record for AI Engineering](https://books.google.com/books/about/AI_Engineering.html?id=YLbT0AEACAAJ), [KDPTop Applications & Software list](https://kdptop.com/kdp/categories/applications-software-156147011/), [Evals cover/product record](https://www.indigo.ca/en-ca/evals-for-ai-engineers-systematically-measuring-and-improving-ai-applications/9798341660724.html).
+
+Interpretation: the white/black/animal-illustration treatment is an O'Reilly publisher identity, not a general cover formula to copy. The useful transferable pattern is high title legibility, a clear technical promise, restrained supporting text, and one memorable visual metaphor. Our own cover must have an original visual identity and must not imitate another publisher's layout, colors, fonts, or imagery.
