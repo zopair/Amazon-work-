@@ -128,3 +128,46 @@ Source: [KDPTop Applied Mathematics Kindle eBooks, Nov 9 2026](https://kdptop.co
 Six Math Essentials appeared at list position #3 with two reviews and a $13.99 listing price. This is a useful example of a new title entering a category list, but the author is a Fields Medalist and the book is from an established publisher. It is not evidence that an unknown self-publisher can reproduce the same result. The category median of 236 reviews is the more cautious baseline.
 
 The subcategory distinction matters: Applied Mathematics is not interchangeable with Mathematical & Statistical Applications & Software, which had a much lower median review count in the earlier snapshot. Our 50-book audit must keep exact category paths separate.
+
+
+## Deeper software/AI subcategory scan
+
+The strongest new lead is not necessarily the broad Generative AI category. A scan of Applications & Software Kindle eBooks shows several narrower segments with different economics:
+
+| Subcategory | Median price | Median reviews | Share under 100 reviews | New releases in 90 days | List entries that day | KDPTop score |
+|---|---:|---:|---:|---:|---:|---:|
+| Applications & Software (parent) | $8.99 | 38 | 68% | 19% | 33 | 36/100 |
+| Natural Language Processing | $12.99 | 16 | Not surfaced | Not surfaced | 19 | 32/100 |
+| Business (Applications & Software) | $9.99 | 30 | 76% | 14% | 43 | 33/100 |
+| Educational Software | $6.99 | 4 | 89% | 13% | Not surfaced | 30/100 |
+| E-mail | $8.99 | 6 | Not surfaced | Not surfaced | 0 | 23/100 |
+
+Sources:
+- [Applications & Software Kindle eBooks, Nov 11 2026](https://kdptop.com/kdp/categories/applications-software-156147011/)
+- [Natural Language Processing Kindle eBooks, Nov 11 2026](https://kdptop.com/kdp/categories/natural-language-processing-16977139011/)
+- [Business under Applications & Software, Nov 9 2026](https://kdptop.com/kdp/categories/business-156148011/)
+- [Educational Software Kindle eBooks](https://kdptop.com/kdp/categories/educational-software-16977136011/)
+- [E-mail Kindle eBooks](https://kdptop.com/kdp/categories/e-mail-16977137011/)
+
+### Actual competitor title and price patterns
+
+The Applications & Software top 10 includes:
+- Claude AI for Business: The 10X Playbook — $0.99, 36 reviews, 4.8 stars.
+- Claude Anthology — $1.00, 46 reviews, 4.5 stars.
+- The AI Workshop — $7.99, 552 reviews, 4.3 stars.
+- AI Engineering: Building Applications with Foundation Models — $43.70, 1,029 reviews, 4.6 stars.
+- Evals for AI Engineers: Systematically Measuring and Improving AI Applications — $67.99, 1 review, 5.0 stars.
+- Build with Claude Code: From zero to deployed apps with AI-assisted development — $33.24, 13 reviews, 4.7 stars.
+
+These listings show a wide price ladder, from low-price discovery titles to premium technical references. They do not establish the profitability of any one title. The one-review premium title is a new entrant signal, not proof of repeatable demand.
+
+Sources: [KDPTop Applications & Software top 10](https://kdptop.com/kdp/categories/applications-software-156147011/).
+
+### Updated priority hypotheses
+
+1. **Natural Language Processing / applied AI engineering:** median price $12.99, median reviews 16, and 19 list entries on the snapshot day. This is attractive for a practical, tested technical guide, but the $12.99 price sits exactly at the current US 70% royalty ceiling.
+2. **Business workflows with AI software:** median price $9.99, median reviews 30, 76% below 100 reviews, and 43 list entries that day. A narrowly scoped workflow playbook may be more defensible than another general AI introduction.
+3. **Mathematical & Statistical Applications & Software:** median price $24.48 and median reviews 42. Higher price may support a premium reference, but the US price is above the 70% band, so the 35% royalty option applies at that price.
+4. **Generative AI:** low median reviews ($10) and $7.99 median price, but high daily list turnover. This may be a fast-moving market with higher update costs and greater risk of outdated content.
+
+The low review counts in Educational Software and E-mail are not sufficient evidence of opportunity by themselves: low turnover or a small audience can produce the same pattern. Do not select a niche from review count alone.
