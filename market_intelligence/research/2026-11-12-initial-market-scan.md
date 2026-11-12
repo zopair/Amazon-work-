@@ -77,3 +77,33 @@ Run a 50-book audit in each of these two primary candidate subcategories:
 2. Mathematical & Statistical — segment by practical application and audience (e.g. data practitioners, business analysts, exam learners).
 
 Do not use KDPTop's proprietary opportunity scores as our score. The numbers above are discovery signals only; our repository scoring requires dated competitor observations and documented reader-value evidence.
+
+
+## Book-level reference cases (not self-publishing benchmarks)
+
+### Six Math Essentials — applied mathematics
+
+- KDPTop reported it at category list position #3 in Applied Mathematics Kindle eBooks on its Nov 9 snapshot, at $13.99, 5.0 stars, and 2 reviews.
+- The US publisher lists 128 pages for the US edition. The official cover uses a deep purple field, a subtle hexagonal grid, one central gold hexagon, and restrained gold serif typography.
+- Its value proposition is a short, accessible tour of six mathematical ideas: numbers, algebra, geometry, probability, analysis, and dynamics.
+- Interpretation: a new release can enter a subcategory ranking with few reviews, but this title benefits from a highly recognized author and an established publisher. Do not treat it as a realistic indie-author baseline.
+
+Sources: [KDPTop Applied Mathematics Kindle list](https://kdptop.com/kdp/categories/applied-158706011/), [Macmillan official book page](https://us.macmillan.com/books/9780374621797/sixmathessentials/), [Apple Books edition details](https://books.apple.com/us/book/six-math-essentials/id6758016585).
+
+### Co-Existence: The Next Phase of AI — general AI guide
+
+- KDPTop reported it at category list position #1 in Artificial Intelligence Kindle eBooks on its Nov 11 snapshot, at $16.99, 4.7 stars, and 74 reviews.
+- The publisher lists 240 pages and a 6 × 9 inch print edition. The content is positioned as a research-informed field guide: working productively with AI, preserving human judgment, distinguishing real capability from hype, and adapting work and education.
+- Interpretation: a strong general-interest AI book can command a higher price, but this is a major-publisher title by an established academic author, not a direct self-publishing benchmark.
+
+Sources: [KDPTop Artificial Intelligence Kindle list](https://kdptop.com/kdp/categories/artificial-intelligence-16977170011/), [Penguin Random House official book page](https://www.penguinrandomhouse.com/books/813026/co-existence-by-ethan-mollick/).
+
+## Design and format conclusions so far
+
+- There is no universal bestseller cover palette: the two references use very different visual languages. We must measure cover patterns across the full 50-book sample in each niche rather than generalize from two titles.
+- Page counts vary by product promise and edition: the reference math title is 128 pages; the AI field guide is 240 pages. Neither number is a target by itself.
+- Print trim dimensions and Kindle eBook page counts are not interchangeable. Capture format and edition separately.
+- For reflowable Kindle eBooks, reader font size is controlled by the device/app; do not claim a single market-winning body font size. Measure typography only from a fixed-layout or print preview.
+- Amazon.com expanded the 70% eBook royalty price band to USD 2.99-$12.99 effective July 7, 2026. Egypt is among the 70% territories, but eligibility depends on the buyer's country, list price, KDP Select conditions in certain countries, and delivery costs. A US list price of $13.99 is outside the current 70% band. See [KDP price requirements](https://kdp.amazon.com/en_US/help/topic/G200634560) and [royalty territories/calculation](https://kdp.amazon.com/en_US/help/topic/G200634500).
+
+These examples are reference cases only. The 50-book audit remains the gate before choosing our first title.
