@@ -19,9 +19,11 @@ REQUIRED_FIELDS = (
 )
 EVIDENCE_FIELDS = (
     "price", "currency", "bsr", "review_count", "rating", "publication_date",
-    "page_count", "format", "evidence_url", "observed_at", "cover_palette",
-    "cover_style", "title_pattern", "font_style", "interior_style",
-    "content_type", "content_value_notes", "review_gap_notes",
+    "page_count", "format", "language", "evidence_url", "observed_at", "asin", "title",
+    "subtitle", "audience", "cover_palette", "cover_style", "cover_width_px",
+    "cover_height_px", "title_pattern", "font_style", "body_font_size_pt",
+    "heading_font_size_pt", "interior_style", "content_type",
+    "description_structure", "keyword_topics", "content_value_notes", "review_gap_notes",
 )
 WEIGHTS = {
     "demand": 0.25,
@@ -77,6 +79,10 @@ def validate_record(record: dict[str, Any]) -> dict[str, Any]:
     normalized["page_count"] = (
         _number(pages, "page_count", minimum=1, integer=True) if pages else None
     )
+    for field in ("cover_width_px", "cover_height_px", "body_font_size_pt", "heading_font_size_pt"):
+        value = normalized.get(field)
+        value = "" if value is None else str(value).strip()
+        normalized[field] = _number(value, field, minimum=1) if value else None
     try:
         normalized["publication_date_parsed"] = date.fromisoformat(
             str(normalized["publication_date"])
@@ -100,8 +106,22 @@ def validate_record(record: dict[str, Any]) -> dict[str, Any]:
 
 def _distribution(records: list[dict[str, Any]], field: str) -> dict[str, int]:
     values = [str(row.get(field, "")).strip() for row in records
-              if str(row.get(field, "")).strip()]
+              if row.get(field) is not None and str(row.get(field, "")).strip()]
     return dict(Counter(values).most_common())
+
+
+def _tag_distribution(records: list[dict[str, Any]], field: str) -> dict[str, int]:
+    tags = []
+    for row in records:
+        value = row.get(field)
+        if value is not None:
+            tags.extend(part.strip().lower() for part in str(value).split(";") if part.strip())
+    return dict(Counter(tags).most_common())
+
+
+def _optional_median(records: list[dict[str, Any]], field: str) -> float | None:
+    values = [row[field] for row in records if row.get(field) is not None]
+    return round(float(median(values)), 2) if values else None
 
 
 def _evidence_score(records: list[dict[str, Any]]) -> float:
@@ -142,7 +162,7 @@ def _percentile_scores(groups: list[dict[str, Any]]) -> dict[tuple[str, str, str
 
 def score_market(records: Iterable[dict[str, Any]], *,
                  as_of: date | str,
-                 minimum_sample: int = 5) -> list[dict[str, Any]]:
+                 minimum_sample: int = 10) -> list[dict[str, Any]]:
     """Score niches from observed listings; never infer units sold from BSR."""
     if minimum_sample < 2:
         raise ValueError("minimum_sample must be at least 2")
@@ -248,12 +268,19 @@ def score_market(records: Iterable[dict[str, Any]], *,
             "median_price": round(median(item["price"] for item in items), 2),
             "currency": group["currency"],
             "median_page_count": median(page_counts) if page_counts else None,
+            "median_cover_width_px": _optional_median(items, "cover_width_px"),
+            "median_cover_height_px": _optional_median(items, "cover_height_px"),
+            "median_body_font_size_pt": _optional_median(items, "body_font_size_pt"),
+            "median_heading_font_size_pt": _optional_median(items, "heading_font_size_pt"),
             "cover_palette_distribution": _distribution(items, "cover_palette"),
             "cover_style_distribution": _distribution(items, "cover_style"),
             "title_pattern_distribution": _distribution(items, "title_pattern"),
             "font_style_distribution": _distribution(items, "font_style"),
             "interior_style_distribution": _distribution(items, "interior_style"),
             "content_type_distribution": _distribution(items, "content_type"),
+            "audience_distribution": _distribution(items, "audience"),
+            "description_structure_distribution": _distribution(items, "description_structure"),
+            "keyword_topic_distribution": _tag_distribution(items, "keyword_topics"),
             "review_gap_evidence": [
                 item["review_gap_notes"] for item in items
                 if str(item.get("review_gap_notes", "")).strip()
