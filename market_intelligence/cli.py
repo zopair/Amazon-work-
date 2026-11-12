@@ -23,7 +23,7 @@ def main() -> int:
     score_parser = subparsers.add_parser("score", help="score observed Kindle niches")
     score_parser.add_argument("csv_path", type=Path)
     score_parser.add_argument("--as-of", required=True, help="reference date YYYY-MM-DD")
-    score_parser.add_argument("--min-sample", type=int, default=5)
+    score_parser.add_argument("--min-sample", type=int, default=10)
     score_parser.add_argument("--output", type=Path, default=Path("reports/kdp-market-score.json"))
     args = parser.parse_args()
 
