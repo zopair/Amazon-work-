@@ -329,7 +329,7 @@ def score_market(records: Iterable[dict[str, Any]], *,
                         "evidence_url", "observed_at",
                     )
                 }
-                for item in sorted(items, key=lambda row: row["bsr"])
+                for item in sorted(items, key=lambda row: row["category_list_rank"])
             ],
             "evidence_urls": sorted({item["evidence_url"] for item in items}),
             "scoring_weights": WEIGHTS.copy(),
