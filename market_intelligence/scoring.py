@@ -143,7 +143,7 @@ def _evidence_score(records: list[dict[str, Any]]) -> float:
 
 
 def _percentile_scores(groups: list[dict[str, Any]]) -> dict[tuple[str, str, str, str, str], float]:
-    """Rank niche median BSR only against niches in the same market/category."""
+    """Rank niche median category-list position only against matching market/category/format/language cohorts."""
     by_category: dict[tuple[str, str, str, str], list[dict[str, Any]]] = defaultdict(list)
     for group in groups:
         if len(group["records"]) >= group["minimum_sample"]:
