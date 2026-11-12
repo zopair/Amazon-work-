@@ -45,6 +45,20 @@ The weights and the <=100-review / 365-day entry thresholds are version 0.1 scre
 
 No score converts category-list position, BSR, or review counts into sales. A single-category sample cannot establish market size. Price and page count are descriptive outputs, not profitability estimates. KDP royalties must be calculated separately using current marketplace-specific terms and the actual delivery fee.
 
+## Kindle royalty economics
+
+For Amazon.com, KDP expanded the 70% eBook price band to USD 2.99-12.99 effective July 7, 2026. The 35% option remains available up to USD 200, subject to file-size-dependent minimum prices. The 70% formula is 70% of list price after applicable VAT and delivery costs; Amazon.com delivery is USD 0.15 per MB, with file size rounded up to the nearest KB. The 35% option is 35% of list price after applicable VAT and has no delivery-cost deduction.
+
+Egypt is listed among the 70% royalty territories. The buyer's country determines whether a sale receives 70% or 35%; the publisher does not need to live in a 70% territory. Brazil, India, Japan, and Mexico require KDP Select enrollment for the 70% rate. The built-in estimator supports Amazon.com only and requires an explicit buyer country and VAT rate. Always confirm the actual royalty in KDP Bookshelf before publishing.
+
+Example only: a USD 9.99 eBook with a 1.5 MB file and a 70%-eligible buyer, assuming 0% VAT, yields an estimated USD 6.83 royalty after delivery cost. A USD 13.99 list price is outside the current US 70% band and falls to 35% in the estimator.
+
+Run the estimator:
+
+    python -m market_intelligence.cli royalty 9.99 --file-size-mb 1.5 --buyer-country EG --royalty-option 70
+
+Official references: [KDP eBook list-price requirements](https://kdp.amazon.com/en_US/help/topic/G200634560), [KDP digital-book pricing and territories](https://kdp.amazon.com/en_US/help/topic/G200634500), [KDP eBook royalties](https://kdp.amazon.com/en_US/help/topic/G200644210).
+
 ## Human scoring rubric
 
 Use the same rubric across all niches and keep the written notes:
