@@ -37,6 +37,7 @@ def main() -> int:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     report = {
         "report_type": "kdp-market-opportunity-screen",
+        "scoring_version": "0.1.0",
         "as_of": args.as_of,
         "source_file": str(args.csv_path),
         "niches": results,
