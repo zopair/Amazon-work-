@@ -11,7 +11,7 @@ Before producing a book, collect comparable competitor observations and identify
 1. Select one Amazon marketplace, one Kindle format, one language, one category path, and one narrowly defined niche per sample.
 2. Capture at least 50 relevant books per niche for a decision-grade study. Ten is the default minimum for a preliminary score. Five can be used only for an explicitly provisional screen; it is not enough to claim market demand.
 3. Record each listing's ASIN, exact title/subtitle, price/currency, BSR as observed, review count, rating, publication date, format, page count when available, language, and product URL.
-4. Inspect cover palette, cover style, title pattern, typography, interior style, and content type. Record factual observations, not subjective assumptions.
+4. Inspect cover palette, cover style, cover image dimensions when observable, title/subtitle pattern, typography, interior style, audience, description structure, keyword themes, and content type. Record factual observations, not subjective assumptions. For reflowable Kindle eBooks, reader-controlled font size is not a stable product attribute; record font sizes only when a fixed-layout or print preview makes them measurable.
 5. Read a structured sample of recent positive and critical reviews. Record recurring unmet needs in your own words; do not copy review text. Set gap_score_0_5 and differentiation_score_0_5 only after writing supporting notes.
 6. Record observed_at as the date the listing was inspected. Keep a new snapshot rather than silently overwriting historical observations.
 7. Use only permitted public access and official interfaces. Do not scrape pages, evade rate limits, automate account actions, or republish Amazon reviews or copyrighted descriptions.
@@ -26,7 +26,7 @@ Before producing a book, collect comparable competitor observations and identify
 - gap_score_0_5: human-reviewed strength of recurring unmet reader needs, supported by review-gap notes.
 - differentiation_score_0_5: human-reviewed ability to create a meaningfully better/original product, supported by content-value notes.
 - evidence_url, observed_at: provenance and observation timestamp.
-- design/content fields capture cover palette/style, title pattern, typography, interior style, content type, and value proposition.
+- design/content fields capture cover palette/style/dimensions, title/subtitle pattern, typography, interior style, audience, description structure, keyword themes, content type, and value proposition. The report retains each competitor observation for audit.
 
 ## Scoring model
 
