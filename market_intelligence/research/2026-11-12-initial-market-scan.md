@@ -107,3 +107,24 @@ Sources: [KDPTop Artificial Intelligence Kindle list](https://kdptop.com/kdp/cat
 - Amazon.com expanded the 70% eBook royalty price band to USD 2.99-$12.99 effective July 7, 2026. Egypt is among the 70% territories, but eligibility depends on the buyer's country, list price, KDP Select conditions in certain countries, and delivery costs. A US list price of $13.99 is outside the current 70% band. See [KDP price requirements](https://kdp.amazon.com/en_US/help/topic/G200634560) and [royalty territories/calculation](https://kdp.amazon.com/en_US/help/topic/G200634500).
 
 These examples are reference cases only. The 50-book audit remains the gate before choosing our first title.
+
+
+## Applied Mathematics control group
+
+A newer snapshot of the broader Applied Mathematics Kindle eBook category helps interpret the Six Math Essentials case:
+
+| Metric | Applied Mathematics Kindle eBooks |
+|---|---:|
+| Median listed price | $9.99 |
+| Median reviews | 236 |
+| Average rating | 4.4 |
+| Share with fewer than 100 reviews | 37% |
+| New releases in last 90 days | 12% |
+| Books entering the list that day | 33 |
+| KDPTop opportunity score | 28/100 |
+
+Source: [KDPTop Applied Mathematics Kindle eBooks, Nov 9 2026](https://kdptop.com/kdp/categories/applied-158706011/).
+
+Six Math Essentials appeared at list position #3 with two reviews and a $13.99 listing price. This is a useful example of a new title entering a category list, but the author is a Fields Medalist and the book is from an established publisher. It is not evidence that an unknown self-publisher can reproduce the same result. The category median of 236 reviews is the more cautious baseline.
+
+The subcategory distinction matters: Applied Mathematics is not interchangeable with Mathematical & Statistical Applications & Software, which had a much lower median review count in the earlier snapshot. Our 50-book audit must keep exact category paths separate.
