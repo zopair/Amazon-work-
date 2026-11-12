@@ -38,9 +38,24 @@ Only niches with at least ten observed books and at least two comparable niches 
 | Entry signal | 20% | Average of share with <=100 reviews and share published in the last 365 days |
 | Reader-value gap | 25% | Mean human gap score normalized to 0-100 |
 | Differentiation | 15% | Mean human differentiation score normalized to 0-100 |
-| Evidence quality | 15% | Completeness of listing/design/content evidence fields |
+| Evidence quality | 15% | Average of evidence-field completeness and observation freshness (100% when observed within 30 days) |
+
+The weights and the <=100-review / 365-day entry thresholds are version 0.1 screening heuristics, not a statistically validated prediction model. Calibrate them against the first 3-6 months of our own KDP outcomes before using the score as a production decision rule. Gap and differentiation ratings must have written evidence notes. Observations older than 30 days reduce evidence quality; observations dated after the report date are rejected.
 
 No score converts BSR or review counts into sales. A single-category sample cannot establish market size. Price and page count are descriptive outputs, not profitability estimates. KDP royalties must be calculated separately using current marketplace-specific terms and the actual delivery fee.
+
+## Human scoring rubric
+
+Use the same rubric across all niches and keep the written notes:
+
+- Reader-value gap (0): no recurring unmet need found.
+- 1: isolated or vague complaint; no pattern.
+- 2: repeated but low-impact complaint in a small review sample.
+- 3: recurring, specific need across independent recent reviews.
+- 4: repeated high-impact need plus clear evidence current books do not solve it well.
+- 5: critical, repeated need with a clearly defined reader outcome and no adequate competing solution found in the reviewed sample.
+
+Differentiation (0): no meaningful improvement; 1: cosmetic changes; 2: modest organization or added material; 3: substantial original examples or exercises; 4: tested workflows, case studies, or reusable tools; 5: independently validated, distinctly superior outcome supported by original research or demonstrated results.
 
 ## Run locally
 
