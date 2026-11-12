@@ -51,6 +51,18 @@ class MarketScoringTests(unittest.TestCase):
         self.assertIsNone(scored["Niche C"]["demand_score"])
         self.assertEqual(scored["Niche C"]["status"], "insufficient_comparators")
 
+    def test_category_rank_scoring_works_when_product_bsr_is_unavailable(self):
+        rows = []
+        for i in range(5):
+            a = record(f"NA{i}", "Rank one", 1000 + i, 20, AS_OF)
+            b = record(f"NB{i}", "Rank two", 2000 + i, 20, AS_OF)
+            a["bsr"] = ""
+            b["bsr"] = ""
+            rows.extend([a, b])
+        results = {item["niche"]: item for item in score_market(rows, as_of=AS_OF, minimum_sample=5)}
+        self.assertGreater(results["Rank one"]["demand_score"], results["Rank two"]["demand_score"])
+        self.assertIsNone(results["Rank one"]["median_bsr"])
+
     def test_recent_books_and_low_review_counts_improve_entry_signal(self):
         rows = []
         for i in range(5):
