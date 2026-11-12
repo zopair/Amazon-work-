@@ -45,3 +45,35 @@ The first candidates for deeper sampling are:
 - A narrowly scoped software/engineering reference where original examples and tested workflows create a defensible advantage.
 
 No book concept is approved by this scan alone.
+
+
+## Narrower subcategory signals
+
+A second pass on subcategories produced two candidates worth comparing against the broad categories:
+
+| Kindle eBook subcategory | Snapshot date | Median price | Median reviews | Average rating | New list entries that day | New releases in 90 days | Third-party opportunity score |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Generative AI | 2026-11-11 | $7.99 | 10 | 4.6 | 35 | Not surfaced in this result | 39/100 |
+| Mathematical & Statistical (Applications & Software) | 2026-11-09 | $24.48 | 42 | 4.5 | 13 | 10% | 30/100 |
+| Probability & Statistics (Applied) | 2026-11-09 | $11.99 | 102 | 4.4 | 54 | 7% | 28/100 |
+| Algebra (Pure Mathematics) | 2026-11-08 | $9.99 | 46 | 4.4 | 47 | 14% | 24/100 |
+
+Sources:
+- [Generative AI Kindle eBooks — KDPTop, 2026-11-11](https://kdptop.com/kdp/categories/generative-ai-214873938011/)
+- [Mathematical & Statistical Kindle eBooks — KDPTop, 2026-11-09](https://kdptop.com/kdp/categories/mathematical-statistical-16977138011/)
+- [Probability & Statistics Kindle eBooks — KDPTop, 2026-11-09](https://kdptop.com/kdp/categories/probability-statistics-158713011/)
+- [Algebra Kindle eBooks — KDPTop, 2026-11-08](https://kdptop.com/kdp/categories/algebra-158734011/)
+
+### Interpretation and risks
+
+- Generative AI has the lowest observed review median and the highest third-party opportunity score among these subcategory snapshots. However, 35 list entries changing in one day indicates a volatile category; this is not proof that 35 new books were published or that demand is stable. The category may reward current, practical material but creates a high maintenance burden.
+- Mathematical & Statistical has a much higher median listed price and a lower review median than broad Mathematics. It may support more valuable specialist references, but the sample is still category-level and its 10% new-release share suggests slower turnover.
+- Probability & Statistics and Algebra show different price/review/turnover patterns. They should not be merged into one "math" segment.
+
+### Research priority
+
+Run a 50-book audit in each of these two primary candidate subcategories:
+1. Generative AI — segment by reader/job-to-be-done (e.g. business workflow, developer implementation, education) before choosing a title.
+2. Mathematical & Statistical — segment by practical application and audience (e.g. data practitioners, business analysts, exam learners).
+
+Do not use KDPTop's proprietary opportunity scores as our score. The numbers above are discovery signals only; our repository scoring requires dated competitor observations and documented reader-value evidence.
