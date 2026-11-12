@@ -67,11 +67,13 @@ def validate_record(record: dict[str, Any]) -> dict[str, Any]:
         normalized["differentiation_score_0_5"],
         "differentiation_score_0_5", minimum=0, maximum=5
     )
-    rating_value = normalized.get("rating")\n    rating = "" if rating_value is None else str(rating_value).strip()
+    rating_value = normalized.get("rating")
+    rating = "" if rating_value is None else str(rating_value).strip()
     normalized["rating"] = (
         _number(rating, "rating", minimum=0, maximum=5) if rating else None
     )
-    pages_value = normalized.get("page_count")\n    pages = "" if pages_value is None else str(pages_value).strip()
+    pages_value = normalized.get("page_count")
+    pages = "" if pages_value is None else str(pages_value).strip()
     normalized["page_count"] = (
         _number(pages, "page_count", minimum=1, integer=True) if pages else None
     )
