@@ -1,0 +1,36 @@
+name: KDP market intelligence tests
+
+on:
+  push:
+    branches: ["**"]
+    paths:
+      - "market_intelligence/**"
+      - "tests/**"
+      - "data/templates/**"
+      - ".github/workflows/market-intelligence.yml"
+  pull_request:
+    paths:
+      - "market_intelligence/**"
+      - "tests/**"
+      - "data/templates/**"
+      - ".github/workflows/market-intelligence.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: kdp-market-intelligence-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Run deterministic unit tests
+        run: python -m unittest discover -s tests -v

@@ -1,0 +1,184 @@
+# Initial Kindle Market Scan — 2026-11-12
+
+## Scope and evidence level
+
+This is a category-level discovery snapshot for Amazon.com Kindle eBooks. It is not a 50-book competitor audit and does not select a final book concept. Category medians and turnover figures below are reported by KDPTop from its daily crawl of Amazon public Best Sellers pages, as of 2026-11-11. KDPTop's opportunity score is its own proprietary screening metric; it is not an Amazon metric and is not used by this repository's scoring engine.
+
+## Category comparison
+
+| Category | Median listed price | Median reviews | Average rating | Share with <100 reviews | New releases in last 90 days | KDPTop opportunity score |
+|---|---:|---:|---:|---:|---:|---:|
+| Artificial Intelligence (Computer Science) | $9.99 | 92 | 4.6 | 52% | 30% | 36/100 |
+| Computers & Technology | $3.99 | 136 | 4.5 | 47% | 28% | 32/100 |
+| Education (Science & Math) | $8.99 | 69 | 4.5 | 55% | 8% | 27/100 |
+| Business & Money | $11.99 | 2,298 | 4.6 | 26% | 29% | 38/100 |
+
+Sources:
+- [Artificial Intelligence Kindle eBooks — KDPTop, 2026-11-11](https://kdptop.com/kdp/categories/artificial-intelligence-16977170011/)
+- [Computers & Technology Kindle eBooks — KDPTop, 2026-11-11](https://kdptop.com/kdp/categories/computers-technology-156116011/)
+- [Education / Science & Math Kindle eBooks — KDPTop, 2026-11-11](https://kdptop.com/kdp/categories/education-158687011/)
+- [Business & Money Kindle eBooks — KDPTop, 2026-11-11](https://kdptop.com/kdp/categories/business-money-154821011/)
+
+## Preliminary interpretation
+
+1. **Artificial Intelligence** is a strong candidate for deeper sampling: its median review count is materially below the broad Business & Money category, while 30% of current best sellers were published in the last 90 days. This indicates category turnover, not guaranteed demand for a new title.
+2. **Computers & Technology** also shows a relatively low review barrier and recent list turnover, but its $3.99 median price suggests substantial low-price competition. We need narrower subcategories before evaluating economics.
+3. **Education / Science & Math** has the lowest median review count and a higher median price than broad technology, but only 8% of current best sellers were published in the last 90 days. This may be a slower-moving, evergreen opportunity; it needs subject-level segmentation.
+4. **Business & Money** has the highest median price but also a very high median review count. Its apparent commercial value should not be confused with easy entry.
+
+## Important measurement caveat
+
+Amazon says Best Sellers Rank is relative to customer activity, updates at least daily, and is not an accurate way to track a book's sales or compare activity across categories. Each format has its own independent rank. Therefore:
+- Never convert BSR into units sold or monthly revenue without a separately validated model.
+- Compare BSR only within the same marketplace, category path, format, and language.
+- Treat category medians as directional snapshots, not market size.
+
+Official reference: [KDP — Sales Ranking](https://kdp.amazon.com/en_US/help/topic/G201648140).
+
+## Next research gate
+
+Before approving a manuscript, collect at least 50 Kindle eBook observations for each of the two strongest narrow niches. For each listing capture ASIN, exact title/subtitle, price, BSR, review count, rating, publication date, page count when available, cover palette/style/dimensions, title pattern, typography where measurable, audience, description structure, keyword themes, content type, reader complaints, and dated evidence URL.
+
+The first candidates for deeper sampling are:
+- Applied AI workflows for a specific professional audience.
+- Applied mathematics/statistics or data-literacy learning for a clearly defined reader.
+- A narrowly scoped software/engineering reference where original examples and tested workflows create a defensible advantage.
+
+No book concept is approved by this scan alone.
+
+
+## Narrower subcategory signals
+
+A second pass on subcategories produced two candidates worth comparing against the broad categories:
+
+| Kindle eBook subcategory | Snapshot date | Median price | Median reviews | Average rating | New list entries that day | New releases in 90 days | Third-party opportunity score |
+|---|---|---:|---:|---:|---:|---:|---:|
+| Generative AI | 2026-11-11 | $7.99 | 10 | 4.6 | 35 | Not surfaced in this result | 39/100 |
+| Mathematical & Statistical (Applications & Software) | 2026-11-09 | $24.48 | 42 | 4.5 | 13 | 10% | 30/100 |
+| Probability & Statistics (Applied) | 2026-11-09 | $11.99 | 102 | 4.4 | 54 | 7% | 28/100 |
+| Algebra (Pure Mathematics) | 2026-11-08 | $9.99 | 46 | 4.4 | 47 | 14% | 24/100 |
+
+Sources:
+- [Generative AI Kindle eBooks — KDPTop, 2026-11-11](https://kdptop.com/kdp/categories/generative-ai-214873938011/)
+- [Mathematical & Statistical Kindle eBooks — KDPTop, 2026-11-09](https://kdptop.com/kdp/categories/mathematical-statistical-16977138011/)
+- [Probability & Statistics Kindle eBooks — KDPTop, 2026-11-09](https://kdptop.com/kdp/categories/probability-statistics-158713011/)
+- [Algebra Kindle eBooks — KDPTop, 2026-11-08](https://kdptop.com/kdp/categories/algebra-158734011/)
+
+### Interpretation and risks
+
+- Generative AI has the lowest observed review median and the highest third-party opportunity score among these subcategory snapshots. However, 35 list entries changing in one day indicates a volatile category; this is not proof that 35 new books were published or that demand is stable. The category may reward current, practical material but creates a high maintenance burden.
+- Mathematical & Statistical has a much higher median listed price and a lower review median than broad Mathematics. It may support more valuable specialist references, but the sample is still category-level and its 10% new-release share suggests slower turnover.
+- Probability & Statistics and Algebra show different price/review/turnover patterns. They should not be merged into one "math" segment.
+
+### Research priority
+
+Run a 50-book audit in each of these two primary candidate subcategories:
+1. Generative AI — segment by reader/job-to-be-done (e.g. business workflow, developer implementation, education) before choosing a title.
+2. Mathematical & Statistical — segment by practical application and audience (e.g. data practitioners, business analysts, exam learners).
+
+Do not use KDPTop's proprietary opportunity scores as our score. The numbers above are discovery signals only; our repository scoring requires dated competitor observations and documented reader-value evidence.
+
+
+## Book-level reference cases (not self-publishing benchmarks)
+
+### Six Math Essentials — applied mathematics
+
+- KDPTop reported it at category list position #3 in Applied Mathematics Kindle eBooks on its Nov 9 snapshot, at $13.99, 5.0 stars, and 2 reviews.
+- The US publisher lists 128 pages for the US edition. The official cover uses a deep purple field, a subtle hexagonal grid, one central gold hexagon, and restrained gold serif typography.
+- Its value proposition is a short, accessible tour of six mathematical ideas: numbers, algebra, geometry, probability, analysis, and dynamics.
+- Interpretation: a new release can enter a subcategory ranking with few reviews, but this title benefits from a highly recognized author and an established publisher. Do not treat it as a realistic indie-author baseline.
+
+Sources: [KDPTop Applied Mathematics Kindle list](https://kdptop.com/kdp/categories/applied-158706011/), [Macmillan official book page](https://us.macmillan.com/books/9780374621797/sixmathessentials/), [Apple Books edition details](https://books.apple.com/us/book/six-math-essentials/id6758016585).
+
+### Co-Existence: The Next Phase of AI — general AI guide
+
+- KDPTop reported it at category list position #1 in Artificial Intelligence Kindle eBooks on its Nov 11 snapshot, at $16.99, 4.7 stars, and 74 reviews.
+- The publisher lists 240 pages and a 6 × 9 inch print edition. The content is positioned as a research-informed field guide: working productively with AI, preserving human judgment, distinguishing real capability from hype, and adapting work and education.
+- Interpretation: a strong general-interest AI book can command a higher price, but this is a major-publisher title by an established academic author, not a direct self-publishing benchmark.
+
+Sources: [KDPTop Artificial Intelligence Kindle list](https://kdptop.com/kdp/categories/artificial-intelligence-16977170011/), [Penguin Random House official book page](https://www.penguinrandomhouse.com/books/813026/co-existence-by-ethan-mollick/).
+
+## Design and format conclusions so far
+
+- There is no universal bestseller cover palette: the two references use very different visual languages. We must measure cover patterns across the full 50-book sample in each niche rather than generalize from two titles.
+- Page counts vary by product promise and edition: the reference math title is 128 pages; the AI field guide is 240 pages. Neither number is a target by itself.
+- Print trim dimensions and Kindle eBook page counts are not interchangeable. Capture format and edition separately.
+- For reflowable Kindle eBooks, reader font size is controlled by the device/app; do not claim a single market-winning body font size. Measure typography only from a fixed-layout or print preview.
+- Amazon.com expanded the 70% eBook royalty price band to USD 2.99-$12.99 effective July 7, 2026. Egypt is among the 70% territories, but eligibility depends on the buyer's country, list price, KDP Select conditions in certain countries, and delivery costs. A US list price of $13.99 is outside the current 70% band. See [KDP price requirements](https://kdp.amazon.com/en_US/help/topic/G200634560) and [royalty territories/calculation](https://kdp.amazon.com/en_US/help/topic/G200634500).
+
+These examples are reference cases only. The 50-book audit remains the gate before choosing our first title.
+
+
+## Applied Mathematics control group
+
+A newer snapshot of the broader Applied Mathematics Kindle eBook category helps interpret the Six Math Essentials case:
+
+| Metric | Applied Mathematics Kindle eBooks |
+|---|---:|
+| Median listed price | $9.99 |
+| Median reviews | 236 |
+| Average rating | 4.4 |
+| Share with fewer than 100 reviews | 37% |
+| New releases in last 90 days | 12% |
+| Books entering the list that day | 33 |
+| KDPTop opportunity score | 28/100 |
+
+Source: [KDPTop Applied Mathematics Kindle eBooks, Nov 9 2026](https://kdptop.com/kdp/categories/applied-158706011/).
+
+Six Math Essentials appeared at list position #3 with two reviews and a $13.99 listing price. This is a useful example of a new title entering a category list, but the author is a Fields Medalist and the book is from an established publisher. It is not evidence that an unknown self-publisher can reproduce the same result. The category median of 236 reviews is the more cautious baseline.
+
+The subcategory distinction matters: Applied Mathematics is not interchangeable with Mathematical & Statistical Applications & Software, which had a much lower median review count in the earlier snapshot. Our 50-book audit must keep exact category paths separate.
+
+
+## Deeper software/AI subcategory scan
+
+The strongest new lead is not necessarily the broad Generative AI category. A scan of Applications & Software Kindle eBooks shows several narrower segments with different economics:
+
+| Subcategory | Median price | Median reviews | Share under 100 reviews | New releases in 90 days | List entries that day | KDPTop score |
+|---|---:|---:|---:|---:|---:|---:|
+| Applications & Software (parent) | $8.99 | 38 | 68% | 19% | 33 | 36/100 |
+| Natural Language Processing | $12.99 | 16 | Not surfaced | Not surfaced | 19 | 32/100 |
+| Business (Applications & Software) | $9.99 | 30 | 76% | 14% | 43 | 33/100 |
+| Educational Software | $6.99 | 4 | 89% | 13% | Not surfaced | 30/100 |
+| E-mail | $8.99 | 6 | Not surfaced | Not surfaced | 0 | 23/100 |
+
+Sources:
+- [Applications & Software Kindle eBooks, Nov 11 2026](https://kdptop.com/kdp/categories/applications-software-156147011/)
+- [Natural Language Processing Kindle eBooks, Nov 11 2026](https://kdptop.com/kdp/categories/natural-language-processing-16977139011/)
+- [Business under Applications & Software, Nov 9 2026](https://kdptop.com/kdp/categories/business-156148011/)
+- [Educational Software Kindle eBooks](https://kdptop.com/kdp/categories/educational-software-16977136011/)
+- [E-mail Kindle eBooks](https://kdptop.com/kdp/categories/e-mail-16977137011/)
+
+### Actual competitor title and price patterns
+
+The Applications & Software top 10 includes:
+- Claude AI for Business: The 10X Playbook — $0.99, 36 reviews, 4.8 stars.
+- Claude Anthology — $1.00, 46 reviews, 4.5 stars.
+- The AI Workshop — $7.99, 552 reviews, 4.3 stars.
+- AI Engineering: Building Applications with Foundation Models — $43.70, 1,029 reviews, 4.6 stars.
+- Evals for AI Engineers: Systematically Measuring and Improving AI Applications — $67.99, 1 review, 5.0 stars.
+- Build with Claude Code: From zero to deployed apps with AI-assisted development — $33.24, 13 reviews, 4.7 stars.
+
+These listings show a wide price ladder, from low-price discovery titles to premium technical references. They do not establish the profitability of any one title. The one-review premium title is a new entrant signal, not proof of repeatable demand.
+
+Sources: [KDPTop Applications & Software top 10](https://kdptop.com/kdp/categories/applications-software-156147011/).
+
+### Updated priority hypotheses
+
+1. **Natural Language Processing / applied AI engineering:** median price $12.99, median reviews 16, and 19 list entries on the snapshot day. This is attractive for a practical, tested technical guide, but the $12.99 price sits exactly at the current US 70% royalty ceiling.
+2. **Business workflows with AI software:** median price $9.99, median reviews 30, 76% below 100 reviews, and 43 list entries that day. A narrowly scoped workflow playbook may be more defensible than another general AI introduction.
+3. **Mathematical & Statistical Applications & Software:** median price $24.48 and median reviews 42. Higher price may support a premium reference, but the US price is above the 70% band, so the 35% royalty option applies at that price.
+4. **Generative AI:** low median reviews ($10) and $7.99 median price, but high daily list turnover. This may be a fast-moving market with higher update costs and greater risk of outdated content.
+
+The low review counts in Educational Software and E-mail are not sufficient evidence of opportunity by themselves: low turnover or a small audience can produce the same pattern. Do not select a niche from review count alone.
+
+
+### Cover-system observations from technical best sellers
+
+Two O'Reilly technical titles in the Applications & Software list share a publisher-specific design system:
+- **AI Engineering: Building Applications with Foundation Models** — 532 pages; white cover, large black sans-serif title, muted brown subtitle, and a single naturalist-style owl illustration. The Amazon list snapshot showed $43.70 and 1,029 reviews.
+- **Evals for AI Engineers: Systematically Measuring and Improving AI Applications** — white cover, large black sans-serif title, restrained orange subtitle, and a naturalist illustration of two animals. The Amazon list snapshot showed $67.99 and one review.
+
+Sources: [Google Books bibliographic record for AI Engineering](https://books.google.com/books/about/AI_Engineering.html?id=YLbT0AEACAAJ), [KDPTop Applications & Software list](https://kdptop.com/kdp/categories/applications-software-156147011/), [Evals cover/product record](https://www.indigo.ca/en-ca/evals-for-ai-engineers-systematically-measuring-and-improving-ai-applications/9798341660724.html).
+
+Interpretation: the white/black/animal-illustration treatment is an O'Reilly publisher identity, not a general cover formula to copy. The useful transferable pattern is high title legibility, a clear technical promise, restrained supporting text, and one memorable visual metaphor. Our own cover must have an original visual identity and must not imitate another publisher's layout, colors, fonts, or imagery.

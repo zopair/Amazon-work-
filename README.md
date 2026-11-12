@@ -33,3 +33,21 @@ Pushes to `main` run CI and publish a 30-day Actions artifact when all gates pas
 Interior trim: 8.5 × 8.5 in. With bleed, PDF media size: 8.625 × 8.75 in (0.125 in outside bleed, plus 0.125 in top and bottom). Text is inset from the trim edge. The output is a single-page-per-PDF-page interior; the wrap cover is a separate deliverable.
 
 A 24-page, 8.5 × 8.5 in color paperback requires Premium Color under current KDP page-count tables; Standard Color starts at 72 pages. KDP currently limits RTL paperback support to Hebrew, Yiddish and Japanese, not Arabic. A bilingual Arabic/English manuscript must therefore be checked in KDP Print Previewer and may not be accepted in the requested RTL configuration. This pipeline cannot guarantee KDP acceptance.
+
+## Evidence-first KDP market intelligence
+
+The separate `market_intelligence/` package screens Kindle niches before production. It ingests a manually observed competitor CSV, validates provenance, and compares niches only within the same marketplace, category path, format, and language. It reports relative BSR signals, entry signals, documented reader-value gaps, differentiation, and evidence completeness. It never estimates unit sales from BSR.
+
+See [market intelligence methodology](market_intelligence/README.md) and the [competitor observation template](data/templates/kdp_competitors.csv). The template is intentionally empty: research findings must be supported by dated listing evidence and documented review analysis before a book concept is approved.
+
+Run the research tests with `python -m unittest discover -s tests -v`. Run a screening report with `python -m market_intelligence.cli score data/observations/kdp_competitors.csv --as-of YYYY-MM-DD` after creating a sourced observation file from the template.
+
+The research layer is independent of the existing 24-page children's book production pipeline. Do not change the approved manuscript or artwork gates as part of market research.
+
+The Amazon.com Kindle royalty estimator uses the current US 70% price band and buyer-country eligibility rules:
+
+```bash
+python -m market_intelligence.cli royalty 9.99 --file-size-mb 1.5 --buyer-country EG --royalty-option 70
+```
+
+See the market intelligence guide for methodology, KDP policy sources, and limitations. The KDP Bookshelf royalty preview remains authoritative.
