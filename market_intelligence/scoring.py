@@ -14,7 +14,7 @@ from typing import Any, Iterable
 REQUIRED_FIELDS = (
     "marketplace", "niche", "category_path", "asin", "title", "price",
     "currency", "bsr", "review_count", "publication_date", "format",
-    "evidence_url", "observed_at", "gap_score_0_5",
+    "evidence_url", "observed_at", "language", "gap_score_0_5",
     "differentiation_score_0_5",
 )
 EVIDENCE_FIELDS = (
@@ -67,11 +67,11 @@ def validate_record(record: dict[str, Any]) -> dict[str, Any]:
         normalized["differentiation_score_0_5"],
         "differentiation_score_0_5", minimum=0, maximum=5
     )
-    rating = str(normalized.get("rating", "")).strip()
+    rating_value = normalized.get("rating")\n    rating = "" if rating_value is None else str(rating_value).strip()
     normalized["rating"] = (
         _number(rating, "rating", minimum=0, maximum=5) if rating else None
     )
-    pages = str(normalized.get("page_count", "")).strip()
+    pages_value = normalized.get("page_count")\n    pages = "" if pages_value is None else str(pages_value).strip()
     normalized["page_count"] = (
         _number(pages, "page_count", minimum=1, integer=True) if pages else None
     )
@@ -111,14 +111,14 @@ def _evidence_score(records: list[dict[str, Any]]) -> float:
     return round(sum(per_record) / len(per_record), 2)
 
 
-def _percentile_scores(groups: list[dict[str, Any]]) -> dict[tuple[str, str, str], float]:
+def _percentile_scores(groups: list[dict[str, Any]]) -> dict[tuple[str, str, str, str, str], float]:
     """Rank niche median BSR only against niches in the same market/category."""
-    by_category: dict[tuple[str, str], list[dict[str, Any]]] = defaultdict(list)
+    by_category: dict[tuple[str, str, str, str], list[dict[str, Any]]] = defaultdict(list)
     for group in groups:
         if len(group["records"]) >= group["minimum_sample"]:
-            by_category[(group["marketplace"], group["category_path"])].append(group)
+            by_category[(group["marketplace"], group["category_path"], group["format"], group["language"])].append(group)
 
-    result: dict[tuple[str, str, str], float] = {}
+    result: dict[tuple[str, str, str, str, str], float] = {}
     for peers in by_category.values():
         if len(peers) < 2:
             continue
@@ -132,7 +132,7 @@ def _percentile_scores(groups: list[dict[str, Any]]) -> dict[tuple[str, str, str
             average_rank = (index + end) / 2
             score = 100.0 * (count - 1 - average_rank) / (count - 1)
             for peer in ordered[index:end + 1]:
-                key = (peer["marketplace"], peer["category_path"], peer["niche"])
+                key = (peer["marketplace"], peer["category_path"], peer["format"], peer["language"], peer["niche"])
                 result[key] = round(score, 2)
             index = end + 1
     return result
@@ -173,7 +173,7 @@ def score_market(records: Iterable[dict[str, Any]], *,
     output = []
     for group in groups:
         items = group["records"]
-        key = (group["marketplace"], group["category_path"], group["niche"])
+        key = (group["marketplace"], group["category_path"], group["format"], group["language"], group["niche"])
         sample_size = len(items)
         median_reviews = median(item["review_count"] for item in items)
         low_review_share = 100.0 * sum(item["review_count"] <= 100 for item in items) / sample_size
@@ -234,7 +234,7 @@ def score_market(records: Iterable[dict[str, Any]], *,
             "evidence_quality_score": evidence_score,
             "opportunity_score": opportunity_score,
             "median_price": round(median(item["price"] for item in items), 2),
-            "currency": items[0]["currency"],
+            "currency": group["currency"],
             "median_page_count": median(page_counts) if page_counts else None,
             "cover_palette_distribution": _distribution(items, "cover_palette"),
             "cover_style_distribution": _distribution(items, "cover_style"),
