@@ -22,7 +22,8 @@ Before producing a book, collect comparable competitor observations and identify
 - niche: narrowly scoped reader/problem segment.
 - category_path: exact Amazon category path used for BSR comparability.
 - asin: Amazon Standard Identification Number.
-- bsr: observed Best Sellers Rank. Lower is better within the same marketplace/category/format/language context; it is not units sold.
+- category_list_rank: observed position in the selected Kindle category Best Sellers list (e.g. 1-100). Lower is a stronger position within that exact list; it is not units sold.
+- bsr: the product-detail-page Best Sellers Rank, captured separately when visible. Do not substitute category_list_rank for BSR or compare BSR across categories.
 - gap_score_0_5: human-reviewed strength of recurring unmet reader needs, supported by review-gap notes.
 - differentiation_score_0_5: human-reviewed ability to create a meaningfully better/original product, supported by content-value notes.
 - evidence_url, observed_at: provenance and observation timestamp.
@@ -34,7 +35,7 @@ Only niches with at least ten observed books and at least two comparable niches 
 
 | Component | Weight | Definition |
 |---|---:|---|
-| Demand signal | 25% | Relative median BSR percentile among comparable niches only |
+| Demand signal | 25% | Relative median category-list position among comparable niches only |
 | Entry signal | 20% | Average of share with <=100 reviews and share published in the last 365 days |
 | Reader-value gap | 25% | Mean human gap score normalized to 0-100 |
 | Differentiation | 15% | Mean human differentiation score normalized to 0-100 |
@@ -42,7 +43,7 @@ Only niches with at least ten observed books and at least two comparable niches 
 
 The weights and the <=100-review / 365-day entry thresholds are version 0.1 screening heuristics, not a statistically validated prediction model. Calibrate them against the first 3-6 months of our own KDP outcomes before using the score as a production decision rule. Gap and differentiation ratings must have written evidence notes. Observations older than 30 days reduce evidence quality; observations dated after the report date are rejected.
 
-No score converts BSR or review counts into sales. A single-category sample cannot establish market size. Price and page count are descriptive outputs, not profitability estimates. KDP royalties must be calculated separately using current marketplace-specific terms and the actual delivery fee.
+No score converts category-list position, BSR, or review counts into sales. A single-category sample cannot establish market size. Price and page count are descriptive outputs, not profitability estimates. KDP royalties must be calculated separately using current marketplace-specific terms and the actual delivery fee.
 
 ## Human scoring rubric
 
